@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainPage from './pages/MainPage/MainPage.js';
+import AIChatTest from './pages/AIChatTest/AIChatTest.js';
+import FormTest from './pages/FormTest/FormTest.js';
+import ListTest from './pages/ListTest/ListTest.js';
+import LayoutTest from './pages/LayoutTest/LayoutTest.js';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/ai-chat" element={<AIChatTest />} />
+          <Route path="/form-test" element={<FormTest />} />
+          <Route path="/list-test" element={<ListTest />} />
+          <Route path="/layout-test" element={<LayoutTest />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

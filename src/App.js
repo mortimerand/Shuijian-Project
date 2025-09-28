@@ -5,6 +5,8 @@ import AIChatTest from './pages/AIChatTest/AIChatTest.js';
 import FormTest from './pages/FormTest/FormTest.js';
 import ListTest from './pages/ListTest/ListTest.js';
 import LayoutTest from './pages/LayoutTest/LayoutTest.js';
+import Login from './pages/Login/Login.js';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.js';
 import './App.css';
 
 function App() {
@@ -12,11 +14,32 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/ai-chat" element={<AIChatTest />} />
-          <Route path="/form-test" element={<FormTest />} />
-          <Route path="/list-test" element={<ListTest />} />
-          <Route path="/layout-test" element={<LayoutTest />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={
+            <ProtectedRoute>
+              <MainPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/ai-chat" element={
+            <ProtectedRoute>
+              <AIChatTest />
+            </ProtectedRoute>
+          } />
+          <Route path="/form-test" element={
+            <ProtectedRoute>
+              <FormTest />
+            </ProtectedRoute>
+          } />
+          <Route path="/list-test" element={
+            <ProtectedRoute>
+              <ListTest />
+            </ProtectedRoute>
+          } />
+          <Route path="/layout-test" element={
+            <ProtectedRoute>
+              <LayoutTest />
+            </ProtectedRoute>
+          } />
         </Routes>
       </Router>
     </div>

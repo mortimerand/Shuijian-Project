@@ -1,8 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './MainPage.css';
 
 function MainPage() {
+  const navigate = useNavigate();
+  const username = localStorage.getItem('username') || '用户';
+  
   // 定义4个测试页面的路由信息
   const testPages = [
     {
@@ -35,11 +38,23 @@ function MainPage() {
     }
   ];
 
+  // 登出功能
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    navigate('/login');
+  };
+
   return (
     <div className="main-page">
       <div className="header">
-        <h1>测试应用</h1>
-        <p>选择以下测试页面开始</p>
+        <div>
+          <h1>测试应用</h1>
+          <p>欢迎，{username}！选择以下测试页面开始</p>
+        </div>
+        <button onClick={handleLogout} className="logout-button">
+          退出登录
+        </button>
       </div>
       
       <div className="page-grid">

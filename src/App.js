@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage.js';
 import AIChatTest from './pages/AIChatTest/AIChatTest.js';
 import ListTest from './pages/ListTest/ListTest.js';
-import LayoutTest from './pages/LayoutTest/LayoutTest.js';
+import ProfilePage from './pages/LayoutTest/ProfilePage.js';
 import DailyTasks from './pages/DailyTasks/DailyTasks.js';
 import Login from './pages/Login/Login.js';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.js';
@@ -35,9 +35,9 @@ function App() {
               <ListTest />
             </ProtectedRoute>
           } />
-          <Route path="/layout-test" element={
+          <Route path="/profile" element={
             <ProtectedRoute>
-              <LayoutTest />
+              <ProfilePage />
             </ProtectedRoute>
           } />
         </Routes>

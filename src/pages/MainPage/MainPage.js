@@ -31,10 +31,10 @@ function MainPage() {
     },
     {
       id: 4,
-      title: '布局测试',
-      description: '测试各种移动端布局组件',
-      route: '/layout-test',
-      icon: '📱'
+      title: '个人信息',
+      description: '查看和编辑个人信息',
+      route: '/profile',
+      icon: '👤'
     }
   ];
 

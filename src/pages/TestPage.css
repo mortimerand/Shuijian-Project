@@ -207,6 +207,129 @@
   color: #666;
 }
 
+/* 个人信息页面样式 */
+.profile-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #f0f0f0;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info,
+.work-stats {
+  margin-bottom: 24px;
+}
+
+.profile-info:last-child,
+.work-stats:last-child {
+  margin-bottom: 0;
+}
+
+.profile-info h2,
+.work-stats h2 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+/* 基本信息表格样式（带边框） */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.info-row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  flex: 1;
+  padding: 12px;
+  font-size: 14px;
+  color: #666;
+  background-color: #f8f9fa;
+  border-right: 1px solid #ddd;
+  font-weight: 500;
+}
+
+.info-value {
+  flex: 2;
+  padding: 12px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 工作量统计表格样式（带边框） */
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.stats-header {
+  display: flex;
+  background-color: #f8f9fa;
+  font-weight: 500;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.stats-row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.stats-row:last-child {
+  border-bottom: none;
+}
+
+.stats-cell {
+  flex: 1;
+  padding: 12px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  border-right: 1px solid #ddd;
+}
+
+.stats-cell:last-child {
+  border-right: none;
+}
+
 /* 响应式设计 */
 @media (max-width: 480px) {
   .grid-layout {
@@ -215,5 +338,10 @@
   
   .flex-layout {
     flex-direction: column;
+  }
+  
+  .avatar {
+    width: 120px;
+    height: 120px;
   }
 }

@@ -17,9 +17,9 @@ function MainPage() {
     },
     {
       id: 2,
-      title: '表单测试',
-      description: '测试移动端表单输入体验',
-      route: '/form-test',
+      title: '每日待办',
+      description: '管理任务清单、施工日志和总进度',
+      route: '/daily-tasks',
       icon: '📝'
     },
     {

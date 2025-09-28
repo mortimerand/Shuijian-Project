@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage.js';
 import AIChatTest from './pages/AIChatTest/AIChatTest.js';
-import FormTest from './pages/FormTest/FormTest.js';
 import ListTest from './pages/ListTest/ListTest.js';
 import LayoutTest from './pages/LayoutTest/LayoutTest.js';
+import DailyTasks from './pages/DailyTasks/DailyTasks.js';
 import Login from './pages/Login/Login.js';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.js';
 import './App.css';
@@ -25,9 +25,9 @@ function App() {
               <AIChatTest />
             </ProtectedRoute>
           } />
-          <Route path="/form-test" element={
+          <Route path="/daily-tasks/*" element={
             <ProtectedRoute>
-              <FormTest />
+              <DailyTasks />
             </ProtectedRoute>
           } />
           <Route path="/list-test" element={

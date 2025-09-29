@@ -7,7 +7,7 @@ function MainPage() {
   const username = localStorage.getItem('username') || '用户';
   
   // 定义4个测试页面的路由信息
-  const testPages = [
+  const Pages = [
     {
       id: 1,
       title: 'AI问答测试',
@@ -40,31 +40,48 @@ function MainPage() {
 
   // 登出功能
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('username');
-    navigate('/login');
+    // 为移动端添加确认提示
+    if (window.confirm('确定要退出登录吗？')) {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('username');
+      navigate('/login');
+    }
   };
 
   return (
-    <div className="main-page">
-      <div className="header">
+    <div className="page-container">
+      <div className="page-header">
         <div>
           <h1>测试应用</h1>
-          <p>欢迎，{username}！选择以下测试页面开始</p>
+          <p>欢迎，{username}！</p>
         </div>
-        <button onClick={handleLogout} className="logout-button">
+        <button 
+          onClick={handleLogout} 
+          className="btn btn-danger logout-button"
+          // 添加触摸反馈相关属性
+          aria-label="退出登录"
+          tabIndex="0"
+        >
           退出登录
         </button>
       </div>
       
-      <div className="page-grid">
-        {testPages.map((page) => (
-          <Link key={page.id} to={page.route} className="page-card">
-            <div className="card-icon">{page.icon}</div>
-            <h2>{page.title}</h2>
-            <p>{page.description}</p>
-          </Link>
-        ))}
+      <div className="page-content">
+        <div className="page-grid">
+          {Pages.map((page) => (
+            <Link 
+              key={page.id} 
+              to={page.route} 
+              className="card page-card"
+              // 添加无障碍属性
+              aria-label={`进入${page.title}页面`}
+            >
+              <div className="card-icon">{page.icon}</div>
+              <h2>{page.title}</h2>
+              <p>{page.description}</p>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

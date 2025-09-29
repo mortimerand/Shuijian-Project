@@ -1,17 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AIChat from '../../components/AIChat/AIChat.js';
-import '../TestPage.css';
+import '../common.css';
 
 function AIChatTest() {
   return (
-    <div className="test-page">
-      <div className="test-header">
+    <div className="page-container">
+      <div className="page-header">
         <h1>AI问答测试</h1>
         <Link to="/" className="back-button">返回主页</Link>
       </div>
-      <div className="test-content">
-        <AIChat />
+      <div className="page-content">
+        <div className="card">
+          <AIChat />
+        </div>
       </div>
     </div>
   );

@@ -1,112 +1,27 @@
-/* 测试页面通用样式 */
-.test-page {
-  min-height: 100vh;
-  background-color: #f8f9fa;
-  display: flex;
-  flex-direction: column;
-}
+/* 导入通用样式 */
+@import './common.css';
 
-.test-header {
-  background-color: #4a90e2;
-  color: white;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.test-header h1 {
-  font-size: 20px;
-  font-weight: 500;
-}
-
-.back-button {
-  color: white;
-  text-decoration: none;
-  font-size: 16px;
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 6px 12px;
-  border-radius: 6px;
-  transition: background-color 0.2s;
-}
-
-.back-button:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-.test-content {
-  flex: 1;
-  padding: 16px;
-  overflow-y: auto;
-}
+/* 测试页面特定样式 */
 
 /* 表单测试样式 */
 .mobile-form {
-  background-color: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  font-family: inherit;
-  box-sizing: border-box;
-  transition: border-color 0.2s;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #4a90e2;
+  @extend .card;
 }
 
 .submit-button {
+  @extend .btn-primary;
   width: 100%;
-  padding: 14px;
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.submit-button:hover {
-  background-color: #357abd;
 }
 
 /* 列表测试样式 */
 .item-list {
-  background-color: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  @extend .card;
+  padding: 0;
 }
 
 .list-item {
-  padding: 16px;
-  border-bottom: 1px solid #eee;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .list-item:last-child {
@@ -116,109 +31,96 @@
 .list-item h3 {
   font-size: 16px;
   font-weight: 500;
-  color: #333;
-  margin-bottom: 8px;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
 }
 
 .list-item p {
   font-size: 14px;
-  color: #666;
-  margin-bottom: 8px;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
   line-height: 1.4;
 }
 
 .item-date {
   font-size: 12px;
-  color: #999;
+  color: var(--text-tertiary);
 }
 
 /* 布局测试样式 */
 .layout-demo {
-  background-color: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  @extend .card;
 }
 
 .layout-demo h2 {
-  font-size: 18px;
-  font-weight: 500;
-  color: #333;
-  margin: 20px 0 12px 0;
-}
-
-.layout-demo h2:first-child {
-  margin-top: 0;
+  @extend .section-title;
 }
 
 .grid-layout {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
 }
 
 .grid-item {
-  background-color: #f0f0f0;
-  padding: 20px;
+  background-color: var(--background-color);
+  padding: var(--spacing-lg);
   text-align: center;
-  border-radius: 8px;
+  border-radius: var(--radius-medium);
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .card-layout {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
 }
 
 .demo-card {
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 8px;
+  background-color: var(--background-color);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-medium);
 }
 
 .demo-card h3 {
   font-size: 16px;
   font-weight: 500;
-  color: #333;
-  margin-bottom: 8px;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
 }
 
 .demo-card p {
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .flex-layout {
   display: flex;
-  gap: 12px;
+  gap: var(--spacing-sm);
 }
 
 .flex-item {
   flex: 1;
-  background-color: #f0f0f0;
-  padding: 20px;
+  background-color: var(--background-color);
+  padding: var(--spacing-lg);
   text-align: center;
-  border-radius: 8px;
+  border-radius: var(--radius-medium);
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 /* 个人信息页面样式 */
 .profile-container {
-  background-color: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  @extend .card;
 }
 
 .avatar-section {
   display: flex;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: var(--spacing-lg);
 }
 
 .avatar {
@@ -226,7 +128,7 @@
   height: 150px;
   border-radius: 50%;
   overflow: hidden;
-  border: 4px solid #f0f0f0;
+  border: 4px solid var(--background-color);
 }
 
 .avatar img {
@@ -237,7 +139,7 @@
 
 .profile-info,
 .work-stats {
-  margin-bottom: 24px;
+  margin-bottom: var(--spacing-lg);
 }
 
 .profile-info:last-child,
@@ -247,83 +149,57 @@
 
 .profile-info h2,
 .work-stats h2 {
-  font-size: 18px;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
+  @extend .section-title;
 }
 
 /* 基本信息表格样式（带边框） */
 .info-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
+  @extend .table;
 }
 
 .info-row {
+  @extend .table-row;
   display: flex;
-  border-bottom: 1px solid #ddd;
-}
-
-.info-row:last-child {
-  border-bottom: none;
 }
 
 .info-label {
   flex: 1;
-  padding: 12px;
+  padding: var(--spacing-sm);
   font-size: 14px;
-  color: #666;
-  background-color: #f8f9fa;
-  border-right: 1px solid #ddd;
+  color: var(--text-secondary);
+  background-color: var(--background-color);
+  border-right: 1px solid var(--border-color);
   font-weight: 500;
 }
 
 .info-value {
   flex: 2;
-  padding: 12px;
+  padding: var(--spacing-sm);
   font-size: 14px;
-  color: #333;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 /* 工作量统计表格样式（带边框） */
 .stats-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
+  @extend .table;
 }
 
 .stats-header {
+  @extend .table-header;
   display: flex;
-  background-color: #f8f9fa;
-  font-weight: 500;
-  color: #333;
-  border-bottom: 1px solid #ddd;
 }
 
 .stats-row {
+  @extend .table-row;
   display: flex;
-  border-bottom: 1px solid #ddd;
-}
-
-.stats-row:last-child {
-  border-bottom: none;
 }
 
 .stats-cell {
+  @extend .table-cell;
   flex: 1;
-  padding: 12px;
-  font-size: 14px;
-  color: #666;
   text-align: center;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid var(--border-color);
 }
 
 .stats-cell:last-child {

@@ -1,0 +1,259 @@
+/* 导入通用样式 */
+@import '../common.css';
+
+/* 个人信息页面特定样式 */
+.test-page {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.test-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-light);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.test-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.back-button {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-small);
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.back-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.test-content {
+  flex: 1;
+  padding: var(--spacing-sm);
+  overflow-y: auto;
+}
+
+/* 个人信息容器 */
+.profile-container {
+  background-color: var(--card-background);
+  border-radius: var(--radius-large);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-medium);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 头像部分 */
+.avatar-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid var(--background-color);
+  box-shadow: var(--shadow-light);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 基本信息和工作量统计共用样式 */
+.profile-info,
+.work-stats {
+  margin-bottom: var(--spacing-lg);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.profile-info:last-child,
+.work-stats:last-child {
+  margin-bottom: 0;
+}
+
+.profile-info h2,
+.work-stats h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* 基本信息表格样式（带边框） */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-medium);
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  flex: 0 0 100%;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 13px;
+  color: var(--text-secondary);
+  background-color: var(--background-color);
+  font-weight: 500;
+  border-right: none;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.info-value {
+  flex: 0 0 100%;
+  padding: var(--spacing-sm);
+  font-size: 15px;
+  color: var(--text-primary);
+  font-weight: 500;
+  background-color: var(--card-background);
+}
+
+/* 工作量统计表格样式（带边框） */
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-medium);
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.stats-header {
+  background-color: var(--background-color);
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.stats-row:last-child {
+  border-bottom: none;
+}
+
+.stats-cell {
+  flex: 0 0 100%;
+  padding: var(--spacing-sm);
+  text-align: left;
+  border-right: none;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.stats-cell:last-child {
+  border-right: none;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.stats-row:last-child .stats-cell {
+  border-bottom: none;
+}
+
+/* 高亮显示完成率100%的单元格 */
+.stats-cell:last-child {
+  font-weight: 600;
+}
+
+/* 平板设备适配 */
+@media (min-width: 768px) {
+  .avatar {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .profile-container {
+    padding: var(--spacing-lg);
+  }
+  
+  .info-label {
+    flex: 0 0 30%;
+    border-right: 1px solid var(--border-light);
+    border-bottom: none;
+  }
+  
+  .info-value {
+    flex: 0 0 70%;
+  }
+  
+  .stats-cell {
+    flex: 0 0 33.33%;
+    text-align: center;
+    border-right: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+  
+  .stats-cell:last-child {
+    border-right: none;
+  }
+}
+
+/* 桌面设备适配 */
+@media (min-width: 1024px) {
+  .test-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+/* 暗黑模式适配（预留） */
+@media (prefers-color-scheme: dark) {
+  .profile-container {
+    background-color: #2d3748;
+  }
+  
+  .info-label {
+    background-color: #1a202c;
+  }
+  
+  .info-value {
+    background-color: #2d3748;
+  }
+}

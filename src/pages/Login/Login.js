@@ -61,7 +61,7 @@ function Login() {
           
           {error && <div className="error-message">{error}</div>}
           
-          <button type="submit" className="login-button">登录</button>
+          <button type="submit" className="btn btn-primary login-button">登录</button>
         </form>
         
         <div className="login-info">

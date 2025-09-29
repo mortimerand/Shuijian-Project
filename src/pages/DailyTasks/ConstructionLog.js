@@ -58,12 +58,12 @@ function ConstructionLog() {
   };
   
   return (
-    <div className="construction-log-container">
+    <div className="card">
       <div className="log-header">
-        <h2>施工日志</h2>
+        <h2 className="section-title">施工日志</h2>
         <button 
           onClick={() => setShowAddForm(!showAddForm)} 
-          className="add-log-button"
+          className="btn btn-primary"
         >
           {showAddForm ? '取消' : '添加日志'}
         </button>
@@ -72,16 +72,18 @@ function ConstructionLog() {
       {/* 添加日志表单 */}
       {showAddForm && (
         <form onSubmit={handleAddLog} className="add-log-form">
-          <textarea
-            placeholder="今日施工情况..."
-            value={newLog.content}
-            onChange={(e) => setNewLog({ ...newLog, content: e.target.value })}
-            rows="4"
-            required
-          />
+          <div className="form-group">
+            <textarea
+              placeholder="今日施工情况..."
+              value={newLog.content}
+              onChange={(e) => setNewLog({ ...newLog, content: e.target.value })}
+              rows="4"
+              required
+            />
+          </div>
           
           <div className="log-form-row">
-            <div className="log-form-group">
+            <div className="form-group log-form-group">
               <label>天气</label>
               <select
                 value={newLog.weather}
@@ -95,7 +97,7 @@ function ConstructionLog() {
               </select>
             </div>
             
-            <div className="log-form-group">
+            <div className="form-group log-form-group">
               <label>温度</label>
               <input
                 type="text"
@@ -107,7 +109,7 @@ function ConstructionLog() {
           </div>
           
           <div className="log-form-row">
-            <div className="log-form-group">
+            <div className="form-group log-form-group">
               <label>施工人数</label>
               <input
                 type="number"
@@ -119,7 +121,7 @@ function ConstructionLog() {
             </div>
           </div>
           
-          <div className="log-form-group">
+          <div className="form-group">
             <label>材料使用</label>
             <input
               type="text"
@@ -129,7 +131,7 @@ function ConstructionLog() {
             />
           </div>
           
-          <button type="submit" className="submit-log-button">
+          <button type="submit" className="btn btn-primary">
             保存日志
           </button>
         </form>

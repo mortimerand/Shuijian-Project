@@ -22,37 +22,41 @@ function DailyTasks() {
   };
   
   return (
-    <div className="daily-tasks-container">
-      <div className="daily-tasks-header">
+    <div className="page-container">
+      <div className="page-header">
         <h1>每日待办</h1>
-        <button onClick={() => navigate('/')} className="back-button">
+        <button onClick={() => navigate('/')} className="btn btn-secondary">
           返回主页
         </button>
       </div>
       
-      {/* 子页面导航 */}
-      <div className="subpages-nav">
-        {subpages.map((subpage) => (
-          <button
-            key={subpage.id}
-            onClick={() => handleSubpageNavigation(subpage.route)}
-            className={`nav-item ${location.pathname.includes(subpage.route) ? 'active' : ''}`}
-          >
-            <span className="nav-icon">{subpage.icon}</span>
-            <span className="nav-text">{subpage.title}</span>
-          </button>
-        ))}
-      </div>
-      
-      {/* 子页面内容 */}
-      <div className="subpages-content">
-        <Routes>
-          {/* 默认路由到任务清单页面 */}
-          <Route path="" element={<TaskList />} />
-          <Route path="task-list" element={<TaskList />} />
-          <Route path="construction-log" element={<ConstructionLog />} />
-          <Route path="progress-summary" element={<ProgressSummary />} />
-        </Routes>
+      <div className="page-content">
+        {/* 子页面导航 */}
+        <div className="card">
+          <div className="subpages-nav">
+            {subpages.map((subpage) => (
+              <button
+                key={subpage.id}
+                onClick={() => handleSubpageNavigation(subpage.route)}
+                className={`btn btn-secondary ${location.pathname.includes(subpage.route) ? 'active' : ''}`}
+              >
+                <span className="nav-icon">{subpage.icon}</span>
+                <span className="nav-text">{subpage.title}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        
+        {/* 子页面内容 */}
+        <div className="subpages-content">
+          <Routes>
+            {/* 默认路由到任务清单页面 */}
+            <Route path="" element={<TaskList />} />
+            <Route path="task-list" element={<TaskList />} />
+            <Route path="construction-log" element={<ConstructionLog />} />
+            <Route path="progress-summary" element={<ProgressSummary />} />
+          </Routes>
+        </div>
       </div>
     </div>
   );

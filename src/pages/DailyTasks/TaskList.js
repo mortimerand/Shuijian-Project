@@ -99,12 +99,12 @@ function TaskList() {
   };
   
   return (
-    <div className="task-list-container">
+    <div className="card">
       <div className="list-header">
-        <h2>任务清单</h2>
+        <h2 className="section-title">任务清单</h2>
         <button 
           onClick={() => setShowAddForm(!showAddForm)} 
-          className="add-task-button"
+          className="btn btn-primary"
         >
           {showAddForm ? '取消' : '添加任务'}
         </button>
@@ -113,20 +113,24 @@ function TaskList() {
       {/* 添加任务表单 */}
       {showAddForm && (
         <form onSubmit={handleAddTask} className="add-task-form">
-          <input
-            type="text"
-            placeholder="任务标题"
-            value={newTask.title}
-            onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-            required
-          />
-          <textarea
-            placeholder="任务描述"
-            value={newTask.description}
-            onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-            rows="2"
-          />
-          <button type="submit" className="submit-task-button">
+          <div className="form-group">
+            <input
+              type="text"
+              placeholder="任务标题"
+              value={newTask.title}
+              onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <textarea
+              placeholder="任务描述"
+              value={newTask.description}
+              onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+              rows="2"
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">
             保存任务
           </button>
         </form>

@@ -47,16 +47,16 @@ function ProgressSummary() {
   
   // 获取进度条颜色
   const getProgressColor = (progress) => {
-    if (progress >= 80) return '#2ecc71';
-    if (progress >= 50) return '#3498db';
-    if (progress >= 20) return '#f39c12';
-    return '#e74c3c';
+    if (progress >= 80) return '#2ecc71'; // --success-color
+    if (progress >= 50) return '#4a90e2'; // --primary-color
+    if (progress >= 20) return '#f39c12'; // --warning-color
+    return '#e74c3c'; // --error-color
   };
   
   return (
-    <div className="progress-summary-container">
+    <div className="card">
       <div className="summary-header">
-        <h2>总进度</h2>
+        <h2 className="section-title">总进度</h2>
       </div>
       
       {/* 项目选择器 */}
@@ -64,7 +64,7 @@ function ProgressSummary() {
         {projects.map((project) => (
           <button
             key={project.id}
-            className={`project-button ${selectedProject.id === project.id ? 'active' : ''}`}
+            className={`btn btn-secondary ${selectedProject.id === project.id ? 'active' : ''}`}
             onClick={() => setSelectedProject(project)}
           >
             {project.name}
@@ -74,7 +74,7 @@ function ProgressSummary() {
       
       {/* 总体进度 */}
       <div className="overall-progress">
-        <h3>{selectedProject.name} - 总体进度</h3>
+        <h3 className="section-title">{selectedProject.name} - 总体进度</h3>
         <div className="progress-bar-container">
           <div 
             className="progress-bar"
@@ -96,7 +96,7 @@ function ProgressSummary() {
       
       {/* 分项工程进度 */}
       <div className="subtasks-progress">
-        <h3>分项工程进度</h3>
+        <h3 className="section-title">分项工程进度</h3>
         <div className="subtasks-list">
           {selectedProject.tasks.map((task, index) => (
             <div key={index} className="subtask-progress-item">
@@ -120,7 +120,7 @@ function ProgressSummary() {
       
       {/* 进度图表（简化版） */}
       <div className="progress-chart">
-        <h3>项目进度对比</h3>
+        <h3 className="section-title">项目进度对比</h3>
         <div className="chart-bars">
           {projects.map((project) => (
             <div key={project.id} className="chart-bar-item">

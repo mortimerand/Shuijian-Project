@@ -1,20 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../TestPage.css';
+import './ProfilePage.css';
 
 function ProfilePage() {
   return (
     <div className="test-page">
       <div className="test-header">
         <h1>个人信息</h1>
-        <Link to="/" className="back-button">返回主页</Link>
+        <Link to="/" className="back-button" aria-label="返回主页">返回主页</Link>
       </div>
       <div className="test-content">
         <div className="profile-container">
           {/* 头像部分 */}
           <div className="avatar-section">
             <div className="avatar">
-              <img src="https://via.placeholder.com/150" alt="用户头像" />
+              <img src="https://via.placeholder.com/150" alt="用户头像" loading="lazy" />
             </div>
           </div>
           

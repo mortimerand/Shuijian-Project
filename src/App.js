@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage.js';
-import AIChatTest from './pages/AIChatTest/AIChatTest.js';
+import AIChatTest from './pages/AIChat/AIChat.js';
 import ListTest from './pages/ListTest/ListTest.js';
-import ProfilePage from './pages/LayoutTest/ProfilePage.js';
+import ProfilePage from './pages/ProfilePage/ProfilePage.js';
 import DailyTasks from './pages/DailyTasks/DailyTasks.js';
 import Login from './pages/Login/Login.js';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.js';

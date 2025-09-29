@@ -1,110 +1,204 @@
-/* 移动端主页样式 */
+/* 导入通用样式 */
+@import '../common.css';
+
+/* 移动优先设计 - 重置默认样式 */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+}
+
+/* 主页特定样式 */
 .main-page {
-  min-height: 100vh;
-  background-color: #f8f9fa;
-  padding: 16px;
+  @extend .page-container;
+  padding: var(--spacing-md);
+}
+
+/* 确保页面容器充满整个屏幕 */
+.page-container {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
-.header {
-  text-align: center;
-  padding: 24px 0;
-  margin-bottom: 16px;
+/* 页面头部样式 - 移动端优化 */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 0;
+  margin: 0;
+  min-height: 60px;
 }
 
-.header h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.header p {
-  font-size: 16px;
-  color: #666;
-}
-
-.page-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+.page-header div {
   flex: 1;
 }
 
+.page-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.page-header p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 2px 0 0 0;
+  padding: 0;
+}
+
+/* 页面内容区域，使其占据剩余空间 */
+.page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: var(--spacing-sm);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 调整网格布局 - 移动优先，单列显示 */
+.page-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+  flex: 1;
+  padding: var(--spacing-sm) 0;
+}
+
+/* 调整卡片样式 - 适应移动端触摸交互 */
 .page-card {
-  background-color: white;
-  border-radius: 12px;
-  padding: 20px;
+  @extend .card;
   text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  height: 100%;
+  min-height: 160px;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-medium);
+  border: 1px solid #e0e0e0;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  /* 触摸目标大小优化 */
+  min-width: 100%;
+  /* 禁用高亮效果 */
+  -webkit-tap-highlight-color: transparent;
 }
 
-.page-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.page-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .card-icon {
-  font-size: 36px;
-  margin-bottom: 12px;
+  font-size: 40px;
+  margin-bottom: var(--spacing-sm);
+  display: block;
 }
 
 .page-card h2 {
   font-size: 16px;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: var(--spacing-xs) 0;
+  line-height: 1.2;
 }
 
 .page-card p {
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.4;
+  flex: 1;
+  margin: 0;
 }
 
-/* 响应式设计 */
-@media (max-width: 480px) {
-  .page-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .page-card {
-    padding: 24px 16px;
-  }
-}
-
-/* 登出按钮样式 */
+/* 登出按钮样式 - 移动优先 */
 .logout-button {
+  @extend .btn-danger;
   background-color: rgba(231, 76, 60, 0.1);
-  color: #e74c3c;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
+  color: var(--error-color);
+  /* 触摸目标优化 */
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--spacing-sm) var(--spacing-md);
   font-size: 14px;
+  border-radius: var(--radius-medium);
+  border: 1px solid var(--error-color);
   cursor: pointer;
-  transition: background-color 0.2s;
+  outline: none;
 }
 
-.logout-button:hover {
+.logout-button:active {
   background-color: rgba(231, 76, 60, 0.2);
 }
 
-/* 修改header样式以适应登出按钮 */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  background-color: #eff780;
-  color: white;
+/* 响应式设计 - 平板和桌面设备适配 */
+@media (min-width: 768px) {
+  .page-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .page-card {
+    min-height: 200px;
+  }
+  
+  .page-header h1 {
+    font-size: 24px;
+  }
+  
+  .page-header p {
+    font-size: 16px;
+  }
 }
 
-.header div {
-  flex: 1;
+/* 大屏幕设备适配 */
+@media (min-width: 1024px) {
+  .page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* 横屏模式适配 */
+@media (orientation: landscape) {
+  .page-grid {
+    gap: var(--spacing-sm);
+  }
+  
+  .page-card {
+    min-height: 140px;
+    padding: var(--spacing-md);
+  }
+  
+  .card-icon {
+    font-size: 32px;
+    margin-bottom: var(--spacing-xs);
+  }
 }

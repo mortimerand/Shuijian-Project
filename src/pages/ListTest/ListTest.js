@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../TestPage.css';
+import '../common.css'; // 改为导入通用样式
 
 function ListTest() {
   // 模拟列表数据
@@ -12,20 +12,22 @@ function ListTest() {
   }));
 
   return (
-    <div className="test-page">
-      <div className="test-header">
+    <div className="page-container"> {/* 改为通用类名 */}
+      <div className="page-header"> {/* 改为通用类名 */}
         <h1>列表测试</h1>
         <Link to="/" className="back-button">返回主页</Link>
       </div>
-      <div className="test-content">
-        <div className="item-list">
-          {items.map((item) => (
-            <div key={item.id} className="list-item">
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-              <span className="item-date">{item.date}</span>
-            </div>
-          ))}
+      <div className="page-content"> {/* 改为通用类名 */}
+        <div className="card"> {/* 添加卡片容器 */}
+          <div className="item-list">
+            {items.map((item) => (
+              <div key={item.id} className="list-item">
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+                <span className="item-date">{item.date}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

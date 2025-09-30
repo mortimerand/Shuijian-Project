@@ -4,12 +4,12 @@ import './ProfilePage.css';
 
 function ProfilePage() {
   return (
-    <div className="test-page">
-      <div className="test-header">
+    <div className="page-container">
+      <div className="page-header">
         <h1>个人信息</h1>
         <Link to="/" className="back-button" aria-label="返回主页">返回主页</Link>
       </div>
-      <div className="test-content">
+      <div className="page-content">
         <div className="profile-container">
           {/* 头像部分 */}
           <div className="avatar-section">

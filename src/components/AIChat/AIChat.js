@@ -110,7 +110,7 @@ function AIChat() {
           placeholder="请输入您的问题..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyPress}
           rows={1}
         />
         <button

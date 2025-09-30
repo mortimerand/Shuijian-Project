@@ -9,6 +9,7 @@
   align-items: center;
   background-color: var(--background-color);
   padding: var(--spacing-md);
+  background:transparent;
 }
 
 .login-card {
@@ -34,6 +35,8 @@
   gap: var(--spacing-lg);
 }
 
+/* 使用通用表单样式 */
+
 .error-message {
   color: var(--error-color);
   font-size: 14px;
@@ -44,13 +47,8 @@
 }
 
 .login-button {
-  @extend .btn-primary;
   width: 100%;
   padding: var(--spacing-sm);
-}
-
-.login-button:active {
-  transform: scale(0.98);
 }
 
 .login-info {
@@ -64,4 +62,23 @@
   font-size: 13px;
   color: var(--text-tertiary);
   margin: var(--spacing-xs) 0;
+}
+
+/* 移动端适配优化 */
+@media (max-width: 480px) {
+  .login-card {
+    padding: var(--spacing-lg);
+    max-width: 100%;
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .login-card h1 {
+    font-size: 20px;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .login-container {
+    padding: var(--spacing-sm);
+  }
 }

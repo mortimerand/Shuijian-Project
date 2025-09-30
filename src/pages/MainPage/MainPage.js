@@ -10,7 +10,7 @@ function MainPage() {
   const Pages = [
     {
       id: 1,
-      title: 'AI问答测试',
+      title: 'AI智能助手',
       description: '与AI助手进行对话交互',
       route: '/ai-chat',
       icon: '💬'

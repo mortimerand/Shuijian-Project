@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./AIChat.css";
+import "./AIChatComponent.css";
 
-function AIChat() {
+function AIChatComponent() {
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -122,4 +122,4 @@ function AIChat() {
   );
 }
 
-export default AIChat;
+export default AIChatComponent;

@@ -75,9 +75,6 @@ function AIChat() {
 
   return (
     <div className="ai-chat-container">
-      <div className="chat-header">
-        <h2>AI问答助手</h2>
-      </div>
 
       <div className="chat-messages">
         {messages.map((message) => (

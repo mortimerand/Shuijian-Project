@@ -3,6 +3,15 @@ import { Link } from 'react-router-dom';
 import './ProfilePage.css';
 
 function ProfilePage() {
+  // 定义文件统计数据
+  const fileStats = [
+    { name: '施工图片总张数', count: 125 },
+    { name: '竣工图片总张数', count: 86 },
+    { name: '施工日志总条数', count: 32 },
+    { name: '技术文件总条数', count: 18 },
+    { name: '竣工文件总条数', count: 24 }
+  ];
+
   return (
     <div className="page-container">
       <div className="page-header">
@@ -37,30 +46,16 @@ function ProfilePage() {
             </div>
           </div>
           
-          {/* 工作量统计表格 */}
+          {/* 工作量统计 */}
           <div className="work-stats">
             <h2>工作量统计</h2>
             <div className="stats-table">
-              <div className="stats-header">
-                <div className="stats-cell">项目名称</div>
-                <div className="stats-cell">完成任务</div>
-                <div className="stats-cell">完成率</div>
-              </div>
-              <div className="stats-row">
-                <div className="stats-cell">项目A</div>
-                <div className="stats-cell">15/20</div>
-                <div className="stats-cell">75%</div>
-              </div>
-              <div className="stats-row">
-                <div className="stats-cell">项目B</div>
-                <div className="stats-cell">8/10</div>
-                <div className="stats-cell">80%</div>
-              </div>
-              <div className="stats-row">
-                <div className="stats-cell">项目C</div>
-                <div className="stats-cell">12/12</div>
-                <div className="stats-cell">100%</div>
-              </div>
+              {fileStats.map((item, index) => (
+                <div key={index} className="stats-row">
+                  <div className="stats-cell">{item.name}</div>
+                  <div className="stats-cell stats-count">{item.count}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

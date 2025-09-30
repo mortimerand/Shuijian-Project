@@ -53,7 +53,7 @@ function AIChat() {
         </div>
         
         {/* 添加新的容器渲染markdown文件 */}
-        <div className="card mt-4">
+        {/* <div className="card mt-4">
           <div className="card-header">
             <h3>地基沉降处理指南</h3>
           </div>
@@ -66,7 +66,7 @@ function AIChat() {
               </ReactMarkdown>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

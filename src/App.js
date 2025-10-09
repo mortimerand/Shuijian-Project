@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage.js';
-import AIChatTest from './pages/AIChat/AIChat.js';
+import AIChat from './pages/AIChat/AIChat.js';
 import ListTest from './pages/ListTest/ListTest.js';
 import ProfilePage from './pages/ProfilePage/ProfilePage.js';
 import DailyTasks from './pages/DailyTasks/DailyTasks.js';
@@ -22,7 +22,7 @@ function App() {
           } />
           <Route path="/ai-chat" element={
             <ProtectedRoute>
-              <AIChatTest />
+              <AIChat />
             </ProtectedRoute>
           } />
           <Route path="/daily-tasks/*" element={

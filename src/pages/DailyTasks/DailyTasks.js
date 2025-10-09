@@ -3,6 +3,7 @@ import { Link, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import TaskList from './TaskList.js';
 import ConstructionLog from './ConstructionLog.js';
 import ProgressSummary from './ProgressSummary.js';
+import TodayTask from './TodayTask.js';
 import './DailyTasks.css';
 
 function DailyTasks() {
@@ -12,7 +13,7 @@ function DailyTasks() {
   // 子页面路由配置
   const subpages = [
     { id: 1, title: '任务清单', route: 'task-list', icon: '📋' },
-    { id: 2, title: '施工日志', route: 'construction-log', icon: '📝' },
+    { id: 2, title: '今日待办', route: 'today-tasks', icon: '📝' },
     { id: 3, title: '总进度', route: 'progress-summary', icon: '📊' }
   ];
   
@@ -53,6 +54,7 @@ function DailyTasks() {
             {/* 默认路由到任务清单页面 */}
             <Route path="" element={<TaskList />} />
             <Route path="task-list" element={<TaskList />} />
+            <Route path="today-tasks" element={<TodayTask />} />
             <Route path="construction-log" element={<ConstructionLog />} />
             <Route path="progress-summary" element={<ProgressSummary />} />
           </Routes>

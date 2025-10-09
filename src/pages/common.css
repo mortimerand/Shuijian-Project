@@ -28,6 +28,29 @@
   --spacing-xl: 32px;
 }
 
+/* 全局重置和基础样式 */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+}
+
 /* 通用页面容器 */
 .page-container {
   min-height: 100vh;
@@ -67,10 +90,22 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .back-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+.back-button:active {
+  transform: scale(0.95);
+}
+
+.back-button:focus {
+  outline: 2px solid white;
+  outline-offset: 2px;
 }
 
 /* 通用内容区 */
@@ -87,10 +122,16 @@
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-medium);
   margin-bottom: var(--spacing-lg);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .card:last-child {
   margin-bottom: 0;
+}
+
+.card:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-light);
 }
 
 /* 通用按钮样式 */
@@ -106,6 +147,9 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  min-width: 44px;
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-primary {
@@ -117,6 +161,15 @@
   background-color: var(--primary-hover);
 }
 
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-primary:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
 .btn-secondary {
   background-color: var(--border-light);
   color: var(--text-secondary);
@@ -126,6 +179,15 @@
   background-color: var(--border-color);
 }
 
+.btn-secondary:active {
+  transform: scale(0.95);
+}
+
+.btn-secondary:focus {
+  outline: 2px solid var(--border-color);
+  outline-offset: 2px;
+}
+
 .btn-danger {
   background-color: var(--error-color);
   color: white;
@@ -133,6 +195,15 @@
 
 .btn-danger:hover {
   background-color: #c0392b;
+}
+
+.btn-danger:active {
+  transform: scale(0.95);
+}
+
+.btn-danger:focus {
+  outline: 2px solid var(--error-color);
+  outline-offset: 2px;
 }
 
 /* 通用表单样式 */
@@ -158,7 +229,7 @@
   font-size: 16px;
   font-family: inherit;
   box-sizing: border-box;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-group input:focus,
@@ -222,4 +293,37 @@
   .btn {
     width: 100%;
   }
+}
+
+/* 实用工具类 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.mb-sm {
+  margin-bottom: var(--spacing-sm);
+}
+
+.mb-md {
+  margin-bottom: var(--spacing-md);
+}
+
+.mb-lg {
+  margin-bottom: var(--spacing-lg);
 }

@@ -334,6 +334,80 @@
   color: var(--text-secondary);
 }
 
+/* 今日待办页面样式 */
+.today-tasks-content {
+  padding: var(--spacing-md);
+}
+
+.today-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.summary-card {
+  background-color: white;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-light);
+}
+
+.summary-card h3 {
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.summary-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.quick-actions {
+  background-color: white;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-light);
+}
+
+.quick-actions h3 {
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.large-button {
+  flex: 1;
+  padding: var(--spacing-md);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+/* 移动端响应式调整 */
+@media (max-width: 480px) {
+  .today-summary {
+    gap: var(--spacing-sm);
+  }
+  
+  .summary-card {
+    padding: var(--spacing-sm);
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+
 /* 施工日志样式 */
 .construction-log-container {
   max-width: 100%;

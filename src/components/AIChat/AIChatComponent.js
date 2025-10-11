@@ -29,7 +29,7 @@ function AIChatComponent() {
   // 发送消息到后端API
   const sendMessageToAPI = async (userMessage) => {
     try {
-      const response = await fetch('http://api/chat/nostream', {
+      const response = await fetch('api/chat/nostream', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

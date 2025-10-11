@@ -22,7 +22,7 @@ function TodayTask() {
                 <p>查看和管理今日需要完成的工作任务</p>
                 <button
                   onClick={() => navigate("/daily-tasks/task-list")}
-                  className="btn btn-secondary"
+                  className="btn btn-primary"
                 >
                   查看任务清单
                 </button>

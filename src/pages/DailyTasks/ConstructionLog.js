@@ -53,26 +53,14 @@ function ConstructionLog() {
     setError(null);
 
     try {
-      // 构建查询字符串
-      const queryParams = new URLSearchParams();
-      // 将 newLog 对象的所有属性添加到查询参数中
-      Object.entries(newLog).forEach(([key, value]) => {
-        if (value !== null && value !== undefined) {
-          queryParams.append(key, value);
-        }
-      });
-
       // 根据项目中其他API调用的模式，使用相应的接口地址
-      const response = await fetch(
-        `api/daily_task/export?${queryParams.toString()}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // 移除body参数
-        }
-      );
+      const response = await fetch("api/daily_task/export", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newLog),
+      });
 
       if (!response.ok) {
         throw new Error("提交失败，请重试");
@@ -567,18 +555,19 @@ function ConstructionLog() {
           }}
         >
           <h4>线下签字提示</h4>
-          <p style={{ margin: "10px 0" }}>
+          <p style={{ margin: '10px 0' }}>
             施工日志已提交成功！请按照以下流程完成线下签字：
           </p>
-          <ol style={{ margin: "10px 0 0 20px" }}>
-            <li style={{ marginBottom: "5px" }}>下载生成的日志文件</li>
-            <li style={{ marginBottom: "5px" }}>打印日志文件并进行线下签字</li>
-            <li style={{ marginBottom: "5px" }}>
-              签字完成后请妥善保管纸质文档
-            </li>
+          <ol style={{ margin: '10px 0 0 20px' }}>
+            <li style={{ marginBottom: '5px' }}>下载生成的日志文件</li>
+            <li style={{ marginBottom: '5px' }}>打印日志文件并进行线下签字</li>
+            <li style={{ marginBottom: '5px' }}>签字完成后请妥善保管纸质文档</li>
           </ol>
-          <div style={{ marginTop: "15px" }}>
-            <button onClick={resetForm} className="btn btn-primary">
+          <div style={{ marginTop: '15px' }}>
+            <button
+              onClick={resetForm}
+              className="btn btn-primary"
+            >
               完成
             </button>
           </div>

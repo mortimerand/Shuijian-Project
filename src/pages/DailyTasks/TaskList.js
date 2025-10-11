@@ -6,11 +6,14 @@ import "./DailyTasks.css";
 function generateUUID() {
   // 添加时间戳前缀来降低冲突概率
   const timestamp = Date.now().toString(36);
-  const random = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0;
-    const v = c === "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
+  const random = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+    /[xy]/g,
+    function (c) {
+      const r = (Math.random() * 16) | 0;
+      const v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    }
+  );
   return `${timestamp}-${random}`;
 }
 
@@ -24,10 +27,15 @@ function TaskList() {
         description: "确定桩基础的准确位置和标高，确保施工符合设计要求",
         templateImages: [
           {
-            url: "../../public/template/1.png",
+            url: "/template/1.2桩点放样/施2020-61 工程测量控制点交桩记录表.xls",
             desc: "桩点放样工程测量控制点交桩记录表",
+            type: "file",
           },
-          { url: "../../public/template/1.jpeg", desc: "桩点位放样数据" },
+          {
+            url: "/template/1.2桩点放样/施工放样测量记录表.xlsx",
+            desc: "桩点位放样数据",
+            type: "file",
+          },
         ],
       },
       {
@@ -36,12 +44,9 @@ function TaskList() {
         description: "检查钢筋存储环境是否符合要求，防止钢筋锈蚀和损坏",
         templateImages: [
           {
-            url: "../../public/template/3.png",
+            url: "/template/4.2钢筋笼钢筋存储/存储场地照片.jpg",
             desc: "钢筋笼钢筋存储原材料存储照片",
-          },
-          {
-            url: "../../public/template/111.png",
-            desc: "钢筋笼钢筋存储存储场地照片",
+            type: "image",
           },
         ],
       },
@@ -50,21 +55,32 @@ function TaskList() {
         title: "钢筋笼钢筋进场",
         description: "验收进场钢筋的质量、规格和数量，确保符合设计和规范要求",
         templateImages: [
-          { url: "../../public/template/4.png", desc: "《出场质量证明书》" },
-          { url: "../../public/template/5.png", desc: "《试验报告单》" },
           {
-            url: "../../public/template/6.png",
+            url: "/template/5.1钢筋笼钢筋进场（日常）/质量证明书.png",
+            desc: "《出场质量证明书》",
+            type: "image",
+          },
+          {
+            url: "/template/5.1钢筋笼钢筋进场（日常）/试验报告单.png",
+            desc: "《试验报告单》",
+            type: "image",
+          },
+          {
+            url: "/template/5.1钢筋笼钢筋进场（日常）/施2020-24a 原材料、试块、试件见证取样送检委托书.xls",
             desc: "《原材料、试块、试件见证取样送检委托书》",
+            type: "file",
           },
         ],
         additionalTemplates: [
           {
-            url: "../../public/template/4.png",
+            url: "/template/5.2钢筋笼钢筋进场（验收）/现场验收照片.png",
             desc: "钢筋笼进场现场验收照片",
+            type: "image",
           },
           {
-            url: "../../public/template/4.png",
+            url: "/template/5.2钢筋笼钢筋进场（验收）/施2020-23 建筑、安装原材料、设备及配件产品进场验收记录.xls",
             desc: "《建筑、安装原材料、设备及配件产品进场验收记录》",
+            type: "file",
           },
         ],
       },
@@ -75,12 +91,9 @@ function TaskList() {
           "向施工人员详细说明钢筋笼焊接的技术要求、质量标准和安全注意事项",
         templateImages: [
           {
-            url: "../../public/template/6.png",
+            url: "/template/6.2钢筋笼焊接技术交底 （验收）/现场技术交底照片.png",
             desc: "钢筋笼焊接技术交底照片",
-          },
-          {
-            url: "../../public/template/7.png",
-            desc: "钢筋笼焊接安全技术交底书",
+            type: "image",
           },
         ],
       },
@@ -89,17 +102,22 @@ function TaskList() {
         title: "钢筋笼生产",
         description: "按照设计图纸和技术要求制作钢筋笼，确保尺寸准确、焊接牢固",
         templateImages: [
-          { url: "../../public/template/9.png", desc: "钢筋笼生产作业照片" },
-          { url: "../../public/template/10.png", desc: "钢筋笼生产检查照片" },
           {
-            url: "../../public/template/10.png",
+            url: "/template/7.1钢筋笼生产（日常）/检查照片.png",
+            desc: "钢筋笼生产作业照片",
+            type: "image",
+          },
+          {
+            url: "/template/7.1钢筋笼生产（日常）/施2020-24b 钢筋焊接连接接头工艺检验见证取样送检委托书.xls",
             desc: "《钢筋笼生产钢筋焊接连接接头工艺检验见证取样送检委托书》",
+            type: "file",
           },
         ],
         additionalTemplates: [
           {
-            url: "../../public/template/4.png",
+            url: "/template/7.2钢筋笼生产（验收）/现场验收照片.jpg",
             desc: "钢筋笼生产监理验收照片",
+            type: "image",
           },
         ],
       },
@@ -108,8 +126,16 @@ function TaskList() {
         title: "成桩技术交底",
         description: "向施工人员详细说明成桩的技术要求、质量标准和安全注意事项",
         templateImages: [
-          { url: "../../public/template/11.png", desc: "成桩技术交底照片" },
-          { url: "../../public/template/12.png", desc: "《安全技术交底书》" },
+          {
+            url: "/template/2.2成桩技术交底/交底图片.png",
+            desc: "成桩技术交底照片",
+            type: "image",
+          },
+          {
+            url: "/template/2.2成桩技术交底/人工挖孔桩技术交底.docx",
+            desc: "《安全技术交底书》",
+            type: "file",
+          },
         ],
       },
       {
@@ -117,14 +143,27 @@ function TaskList() {
         title: "成桩",
         description: "按照设计要求和技术规范进行桩基础的施工，确保成桩质量",
         templateImages: [
-          { url: "../../public/template/12.png", desc: "成桩作业照片" },
-          { url: "../../public/template/13.png", desc: "现拌混凝土施工记录" },
+          {
+            url: "/template/3.1成桩（日常）/现场作业照片.png",
+            desc: "成桩作业照片",
+            type: "image",
+          },
+          {
+            url: "/template/3.1成桩（日常）/施2020-76 现拌混凝土施工记录.xls",
+            desc: "现拌混凝土施工记录",
+            type: "file",
+          },
         ],
         additionalTemplates: [
-          { url: "../../public/template/14.png", desc: "成桩监理验收照片" },
           {
-            url: "../../public/template/14.png",
+            url: "/template/3.2成桩（验收）/现场验收照片.jpg",
+            desc: "成桩监理验收照片",
+            type: "image",
+          },
+          {
+            url: "/template/3.2成桩（验收）/成桩桩长统计表.xlsx",
             desc: "成桩桩长统计表",
+            type: "file",
           },
         ],
       },
@@ -133,26 +172,42 @@ function TaskList() {
         title: "钢筋笼吊装与混凝土灌注",
         description: "将制作好的钢筋笼吊装入孔，并进行混凝土灌注，确保施工质量",
         templateImages: [
-          { url: "../../public/template/14.png", desc: "钢筋笼吊装作业照片" },
           {
-            url: "../../public/template/15.png",
+            url: "/template/8.1钢筋笼吊装、混凝土灌注（日常）/钢筋笼吊装照片.png",
+            desc: "钢筋笼吊装作业照片",
+            type: "image",
+          },
+          {
+            url: "/template/8.1钢筋笼吊装、混凝土灌注（日常）/混凝土灌注照片.png",
             desc: "钢筋笼吊装混凝土灌注照片",
+            type: "image",
           },
           {
-            url: "../../public/template/16.png",
+            url: "/template/8.1钢筋笼吊装、混凝土灌注（日常）/施2020-78 混凝土开盘鉴定.xls",
             desc: "钢筋笼吊装混凝土开盘鉴定",
+            type: "file",
           },
-          { url: "../../public/template/4.png", desc: "钢筋笼吊装施工记录" },
+          {
+            url: "/template/8.1钢筋笼吊装、混凝土灌注（日常）/施2020-75 预拌混凝土施工记录.xls",
+            desc: "钢筋笼吊装施工记录",
+            type: "file",
+          },
         ],
         additionalTemplates: [
           {
-            url: "../../public/template/4.png",
+            url: "/template/8.2钢筋笼吊装、混凝土灌注（验收）/浇筑完成后照片.png",
             desc: "钢筋笼吊装灌注完成照片",
+            type: "image",
           },
-          { url: "../../public/template/4.png", desc: "《混凝土浇灌令》" },
           {
-            url: "../../public/template/4.png",
+            url: "/template/8.2钢筋笼吊装、混凝土灌注（验收）/施2020-77 混凝土浇灌令.xls",
+            desc: "《混凝土浇灌令》",
+            type: "file",
+          },
+          {
+            url: "/template/8.2钢筋笼吊装、混凝土灌注（验收）/施2020-111 人工挖孔灌注桩单桩施工记录.xls",
             desc: "《人工挖孔灌注桩单桩施工记录》",
+            type: "file",
           },
         ],
       },
@@ -256,13 +311,15 @@ function TaskList() {
       status: "pending",
       templateImages: [
         {
-          url: "../../public/template/1.png",
+          url: "/template/1.2桩点放样/施2020-61 工程测量控制点交桩记录表.xls",
           desc: "工程测量控制点交桩记录表",
+          type: "file",
           uploadedFiles: [],
         },
         {
-          url: "../../public/template/2.png",
+          url: "/template/1.2桩点放样/施工放样测量记录表.xlsx",
           desc: "桩点位放样数据",
+          type: "file",
           uploadedFiles: [],
         },
       ],
@@ -280,6 +337,9 @@ function TaskList() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [hasStagedFiles, setHasStagedFiles] = useState(false); // 标记是否有暂存文件
   const [showAdditionalTemplates, setShowAdditionalTemplates] = useState(false); //控制任务额外模板的显隐
+  const [currentTemplateType, setCurrentTemplateType] = useState(null); // 当前预览的模板类型
+  const [showFilePreviewModal, setShowFilePreviewModal] = useState(false); // 文件预览模态框
+  const [currentTemplateFile, setCurrentTemplateFile] = useState(null); // 当前预览的文件
 
   // 添加触摸状态
   const [touchStartX, setTouchStartX] = useState(0);
@@ -339,6 +399,7 @@ function TaskList() {
             templateImages: selectedTask.templateImages.map((img) => ({
               url: img.url,
               desc: img.desc,
+              type: img.type,
               uploadedFiles: [],
             })),
             // 确保新任务包含额外模板信息
@@ -346,6 +407,7 @@ function TaskList() {
               ? selectedTask.additionalTemplates.map((img) => ({
                   url: img.url,
                   desc: img.desc,
+                  type: img.type,
                   uploadedFiles: [],
                 }))
               : [],
@@ -747,13 +809,45 @@ function TaskList() {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   }, []);
 
-  const showImagePreview = useCallback((images, taskId, index = 0) => {
-    const imageUrls = images.map((img) => img.url);
-    setGalleryImages(imageUrls);
-    setCurrentImageIndex(index);
-    setPreviewImage(imageUrls[index]);
-    setShowImageGallery(true);
-    setCurrentTaskId(taskId);
+  // 下载模板文件
+  const downloadTemplateFile = useCallback((fileUrl) => {
+    try {
+      // 创建一个临时的a标签用于下载
+      const link = document.createElement("a");
+      // 设置链接地址
+      link.href = fileUrl;
+      // 设置下载属性，文件名从URL中提取
+      const fileName = fileUrl.split("/").pop();
+      link.download = fileName;
+      // 添加到DOM
+      document.body.appendChild(link);
+      // 触发点击事件
+      link.click();
+      // 移除a标签
+      document.body.removeChild(link);
+      message.success("文件下载已开始");
+    } catch (error) {
+      console.error("文件下载失败:", error);
+      message.error("文件下载失败，请稍后重试");
+    }
+  }, []);
+
+  // 预览模板（根据类型显示图片预览或文件下载）
+  const previewTemplate = useCallback((template, taskId, index = 0) => {
+    if (template.type === "image") {
+      // 对于图片类型，显示图片预览
+      const imageUrls = [template.url];
+      setGalleryImages(imageUrls);
+      setCurrentImageIndex(0);
+      setPreviewImage(imageUrls[index]);
+      setCurrentTaskId(taskId);
+      setShowImageGallery(true);
+    } else {
+      // 对于文件类型，提供下载选项并显示文件信息
+      setCurrentTemplateFile(template);
+      setCurrentTaskId(taskId);
+      setShowFilePreviewModal(true);
+    }
   }, []);
 
   const openImageUploadModal = useCallback((taskId) => {
@@ -868,6 +962,36 @@ function TaskList() {
     closable: true,
     maskClosable: true,
     className: "image-gallery-modal",
+  };
+
+  // 文件预览模态框配置
+  const filePreviewModalProps = {
+    title: currentTemplateFile ? currentTemplateFile.desc : "文件预览",
+    open: showFilePreviewModal,
+    onCancel: () => setShowFilePreviewModal(false),
+    footer: (
+      <>
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            if (currentTemplateFile) {
+              downloadTemplateFile(currentTemplateFile.url);
+            }
+            setShowFilePreviewModal(false);
+          }}
+        >
+          下载文件
+        </button>
+        <button
+          className="btn btn-secondary"
+          onClick={() => setShowFilePreviewModal(false)}
+        >
+          关闭
+        </button>
+      </>
+    ),
+    width: "60%",
+    centered: true,
   };
 
   //获取新阶段标题
@@ -1062,14 +1186,19 @@ function TaskList() {
                     <div
                       className="image-thumbnail"
                       onClick={() => {
-                        showImagePreview(
-                          getCurrentTask().templateImages,
-                          getCurrentTask().id,
-                          imageIndex
-                        );
+                        previewTemplate(image, getCurrentTask().id, imageIndex);
                       }}
                     >
-                      <img src={image.url} alt={`模板 ${imageIndex + 1}`} />
+                      {image.type === "image" ? (
+                        <img src={image.url} alt={`模板 ${imageIndex + 1}`} />
+                      ) : (
+                        <div className="file-placeholder">
+                          <span className="file-icon">📄</span>
+                          <span className="file-type">
+                            {image.url.split(".").pop().toUpperCase()}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -1166,14 +1295,19 @@ function TaskList() {
                             <div
                               className="image-thumbnail"
                               onClick={() => {
-                                showImagePreview(
-                                  [image],
-                                  getCurrentTask().id,
-                                  0
-                                );
+                                previewTemplate(image, getCurrentTask().id, 0);
                               }}
                             >
-                              <img src={image.url} alt={`模板`} />
+                              {image.type === "image" ? (
+                                <img src={image.url} alt={`模板`} />
+                              ) : (
+                                <div className="file-placeholder">
+                                  <span className="file-icon">📄</span>
+                                  <span className="file-type">
+                                    {image.url.split(".").pop().toUpperCase()}
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           </div>
 
@@ -1346,6 +1480,31 @@ function TaskList() {
             ›
           </button>
         </div>
+      </Modal>
+
+      {/* 文件预览弹窗 - 使用Ant Design的Modal组件 */}
+      <Modal {...filePreviewModalProps}>
+        {currentTemplateFile && (
+          <div className="file-preview-content">
+            <div className="file-info">
+              <div className="file-info-item">
+                <strong>文件名称：</strong>
+                {currentTemplateFile.url.split("/").pop()}
+              </div>
+              <div className="file-info-item">
+                <strong>文件类型：</strong>
+                {currentTemplateFile.url.split(".").pop().toUpperCase()}
+              </div>
+              <div className="file-info-item">
+                <strong>文件描述：</strong>
+                {currentTemplateFile.desc}
+              </div>
+              <div className="file-preview-tips">
+                <p>点击"下载文件"按钮可获取该模板文件</p>
+              </div>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );

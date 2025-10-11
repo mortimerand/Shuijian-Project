@@ -84,7 +84,6 @@ function TodayWork() {
               <div key={index} className="card task-card">
                 <div className="card-header">
                   <h2>{task.name}</h2>
-                  {task.taskType && <span className="task-type">{task.taskType}</span>}
                 </div>
                 <div className="card-body">
                   <h3>工作步骤</h3>

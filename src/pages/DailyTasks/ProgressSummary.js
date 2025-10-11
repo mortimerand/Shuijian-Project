@@ -1,144 +1,165 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { Table, Spin, Alert } from "antd";
+import "./DailyTasks.css";
 
 function ProgressSummary() {
-  // 模拟项目进度数据
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      name: '1#住宅楼',
-      totalProgress: 30,
-      expectedCompletion: '2024-06-30',
-      tasks: [
-        { name: '地基工程', progress: 100, status: 'completed' },
-        { name: '主体结构', progress: 20, status: 'in-progress' },
-        { name: '墙体砌筑', progress: 0, status: 'pending' },
-        { name: '水电安装', progress: 0, status: 'pending' },
-        { name: '室内装修', progress: 0, status: 'pending' }
-      ]
-    },
-    {
-      id: 2,
-      name: '2#住宅楼',
-      totalProgress: 15,
-      expectedCompletion: '2024-07-30',
-      tasks: [
-        { name: '地基工程', progress: 80, status: 'in-progress' },
-        { name: '主体结构', progress: 0, status: 'pending' },
-        { name: '墙体砌筑', progress: 0, status: 'pending' },
-        { name: '水电安装', progress: 0, status: 'pending' },
-        { name: '室内装修', progress: 0, status: 'pending' }
-      ]
-    },
-    {
-      id: 3,
-      name: '小区配套设施',
-      totalProgress: 10,
-      expectedCompletion: '2024-08-30',
-      tasks: [
-        { name: '道路施工', progress: 20, status: 'in-progress' },
-        { name: '绿化工程', progress: 0, status: 'pending' },
-        { name: '景观工程', progress: 0, status: 'pending' },
-        { name: '公共设施', progress: 0, status: 'pending' }
-      ]
+  // 状态管理
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // 从后端获取数据
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // API调用
+      const response = await fetch("api/daily_task/progress", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      // 检查响应状态
+      if (!response.ok) {
+        throw new Error(`请求失败，状态码: ${response.status}`);
+      }
+
+      // 解析JSON数据
+      const result = await response.json();
+
+      // 根据summary.txt中的数据格式，检查返回的数据结构
+      if (
+        result.code === "200" &&
+        result.message === "成功" &&
+        Array.isArray(result.data)
+      ) {
+        setData(result.data);
+      } else {
+        throw new Error("获取数据失败: " + (result.message || "未知错误"));
+      }
+    } catch (err) {
+      // 捕获并设置错误信息
+      setError(err.message);
+      // 在控制台记录详细错误
+      console.error("获取任务进度数据失败:", err);
+
+      // 提供模拟数据作为备用，避免白屏
+      setData([
+        {
+          taskType: "GANGJINLONG_SHENGCHAN_246",
+          taskName: "钢筋笼生产_246",
+          taskStatus: "进行中",
+          taskPlanStart: "2024-01-15",
+          taskPlanComplete: "2024-01-25",
+        },
+        {
+          taskType: "GANGJINLONG_SHENGCHAN_247",
+          taskName: "钢筋笼生产_247",
+          taskStatus: "已完成",
+          taskPlanStart: "2024-01-10",
+          taskPlanComplete: "2024-01-14",
+        },
+      ]);
+    } finally {
+      // 无论成功失败，都要结束加载状态
+      setLoading(false);
     }
-  ]);
-  
-  const [selectedProject, setSelectedProject] = useState(projects[0]);
-  
-  // 获取进度条颜色
-  const getProgressColor = (progress) => {
-    if (progress >= 80) return '#2ecc71'; // --success-color
-    if (progress >= 50) return '#4a90e2'; // --primary-color
-    if (progress >= 20) return '#f39c12'; // --warning-color
-    return '#e74c3c'; // --error-color
   };
-  
+
+  // 组件挂载时获取数据
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // 定义表格列配置
+  const columns = [
+    {
+      title: "任务名称",
+      dataIndex: "taskName",
+      key: "taskName",
+    },
+    {
+      title: "任务状态",
+      dataIndex: "taskStatus",
+      key: "taskStatus",
+      // 根据任务状态设置不同的样式
+      render: (status) => {
+        let color = "";
+        if (status === "进行中") {
+          color = "#1890ff";
+        } else if (status === "已完成") {
+          color = "#52c41a";
+        } else if (status === "已逾期") {
+          color = "#f5222d";
+        }
+        return <span style={{ color }}>{status}</span>;
+      },
+      filters: [
+        { text: "进行中", value: "进行中" },
+        { text: "已完成", value: "已完成" },
+        { text: "已逾期", value: "已逾期" },
+      ],
+      onFilter: (value, record) => record.taskStatus === value,
+    },
+    {
+      title: "计划开始时间",
+      dataIndex: "taskPlanStart",
+      key: "taskPlanStart",
+      sorter: (a, b) => new Date(a.taskPlanStart) - new Date(b.taskPlanStart),
+    },
+    {
+      title: "计划完成时间",
+      dataIndex: "taskPlanComplete",
+      key: "taskPlanComplete",
+      sorter: (a, b) =>
+        new Date(a.taskPlanComplete) - new Date(b.taskPlanComplete),
+    },
+  ];
+
   return (
-    <div className="card">
-      <div className="summary-header">
-        <h2 className="section-title">总进度</h2>
-      </div>
-      
-      {/* 项目选择器 */}
-      <div className="project-selector">
-        {projects.map((project) => (
-          <button
-            key={project.id}
-            className={`btn btn-secondary ${selectedProject.id === project.id ? 'active' : ''}`}
-            onClick={() => setSelectedProject(project)}
-          >
-            {project.name}
-          </button>
-        ))}
-      </div>
-      
-      {/* 总体进度 */}
-      <div className="overall-progress">
-        <h3 className="section-title">{selectedProject.name} - 总体进度</h3>
-        <div className="progress-bar-container">
-          <div 
-            className="progress-bar"
-            style={{
-              width: `${selectedProject.totalProgress}%`,
-              backgroundColor: getProgressColor(selectedProject.totalProgress)
-            }}
-          />
+    <div className="progress-summary-container">
+      <h2>任务进度汇总</h2>
+      <button
+        className="btn btn-primary refresh-button"
+        onClick={fetchData}
+        disabled={loading}
+      >
+        {loading ? "刷新中..." : "刷新数据"}
+      </button>
+
+      {error && (
+        <Alert
+          message="获取数据失败"
+          description={error}
+          type="error"
+          showIcon
+          className="error-alert"
+        />
+      )}
+
+      {loading ? (
+        <div className="loading-container">
+          <Spin size="large" tip="加载中..." />
         </div>
-        <div className="progress-info">
-          <span className="progress-percentage">
-            {selectedProject.totalProgress}%
-          </span>
-          <span className="progress-completion">
-            预计完成日期：{selectedProject.expectedCompletion}
-          </span>
-        </div>
-      </div>
-      
-      {/* 分项工程进度 */}
-      <div className="subtasks-progress">
-        <h3 className="section-title">分项工程进度</h3>
-        <div className="subtasks-list">
-          {selectedProject.tasks.map((task, index) => (
-            <div key={index} className="subtask-progress-item">
-              <div className="subtask-info">
-                <span className="subtask-name">{task.name}</span>
-                <span className="subtask-percentage">{task.progress}%</span>
-              </div>
-              <div className="subtask-progress-bar-container">
-                <div 
-                  className="subtask-progress-bar"
-                  style={{
-                    width: `${task.progress}%`,
-                    backgroundColor: getProgressColor(task.progress)
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      
-      {/* 进度图表（简化版） */}
-      <div className="progress-chart">
-        <h3 className="section-title">项目进度对比</h3>
-        <div className="chart-bars">
-          {projects.map((project) => (
-            <div key={project.id} className="chart-bar-item">
-              <div className="chart-bar-label">{project.name}</div>
-              <div className="chart-bar-container">
-                <div 
-                  className="chart-bar"
-                  style={{
-                    height: `${project.totalProgress}%`,
-                    backgroundColor: getProgressColor(project.totalProgress)
-                  }}
-                />
-              </div>
-              <div className="chart-bar-percentage">{project.totalProgress}%</div>
-            </div>
-          ))}
-        </div>
-      </div>
+      ) : (
+        <Table
+          columns={columns}
+          dataSource={data}
+          rowKey="taskType"
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total) => `共 ${total} 条数据`,
+          }}
+          scroll={{ x: "max-content" }}
+          locale={{
+            emptyText: "暂无任务数据",
+          }}
+        />
+      )}
     </div>
   );
 }

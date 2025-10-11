@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./AIChatComponent.css";
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function AIChatComponent() {
   const [messages, setMessages] = useState([
@@ -29,21 +29,24 @@ function AIChatComponent() {
   // 发送消息到后端API
   const sendMessageToAPI = async (userMessage) => {
     try {
-      const response = await fetch('api/chat/nostream', {
-        method: 'GET',
+      // 将消息内容通过URL查询参数传递
+      const url = `api/chat/nostream?message=${encodeURIComponent(
+        userMessage
+      )}`;
+      const response = await fetch(url, {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: userMessage }),
+        // 移除body参数
       });
-      
       const data = await response.json();
-      
+
       // 检查响应是否成功
-      if (data.code === '200' && data.message === 'success') {
+      if (data.code === "200" && data.message === "success") {
         return data.data; // 返回AI回复的内容
       } else {
-        throw new Error(`API请求失败: ${data.message || '未知错误'}`);
+        throw new Error(`API请求失败: ${data.message || "未知错误"}`);
       }
     } catch (err) {
       setError(`发送消息失败: ${err.message}`);
@@ -73,7 +76,7 @@ function AIChatComponent() {
     // 调用后端API获取AI回复
     try {
       const aiResponse = await sendMessageToAPI(input.trim());
-      
+
       if (aiResponse) {
         const aiMessage = {
           id: Date.now() + 1,
@@ -101,12 +104,12 @@ function AIChatComponent() {
   return (
     <div className="ai-chat-container">
       {error && <div className="error-message">{error}</div>}
-      
+
       <div className="chat-messages">
         {messages.map((message) => (
           <div key={message.id} className={`message ${message.sender}`}>
             <div className="message-content">
-              {message.sender === 'ai' ? (
+              {message.sender === "ai" ? (
                 // 对于AI回复，使用ReactMarkdown渲染markdown内容
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {message.text}

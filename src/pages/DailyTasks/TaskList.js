@@ -446,7 +446,7 @@ function TaskList() {
 
       // 发送请求到后端
       const response = await fetch("api/daily_task/upload", {
-        method: "POST",
+        method: "GET",
         body: formData,
       });
 

@@ -30,7 +30,7 @@ function AIChatComponent() {
   const sendMessageToAPI = async (userMessage) => {
     try {
       const response = await fetch('api/chat/nostream', {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },

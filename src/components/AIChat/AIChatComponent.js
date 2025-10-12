@@ -17,6 +17,35 @@ function AIChatComponent() {
   const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
 
+  const CustomLink = ({ href, children, ...props }) => {
+    // 检查是否是视频链接（可以根据需要调整判断条件）
+    const isVideoLink =
+      href &&
+      (href.includes("youtube.com") ||
+        href.includes("youtu.be") ||
+        href.includes("vimeo.com") ||
+        href.includes("bilibili.com") ||
+        href.endsWith(".mp4") ||
+        href.endsWith(".webm") ||
+        href.endsWith(".mov"));
+
+    // 如果是视频链接或其他需要在新页面打开的链接，设置target="_blank"
+    if (isVideoLink) {
+      return (
+        <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+          {children}
+        </a>
+      );
+    }
+
+    // 对于其他链接，使用默认行为
+    return (
+      <a href={href} {...props}>
+        {children}
+      </a>
+    );
+  };
+
   // 自动滚动到最新消息
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -111,7 +140,12 @@ function AIChatComponent() {
             <div className="message-content">
               {message.sender === "ai" ? (
                 // 对于AI回复，使用ReactMarkdown渲染markdown内容
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    a: CustomLink,
+                  }}
+                >
                   {message.text}
                 </ReactMarkdown>
               ) : (

@@ -16,7 +16,7 @@ function TodayWork() {
         setError(null);
         setNoTaskMessage("");
         
-        const response = await fetch("api/daily_task/info");
+        const response = await fetch("/api/daily_task/info");
         if (!response.ok) {
           throw new Error(`请求失败: ${response.status}`);
         }

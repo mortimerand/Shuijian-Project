@@ -53,11 +53,6 @@ function TodayWork() {
 
   return (
     <div className="page-container">
-      <div className="page-header">
-        <h1>今日工作详情</h1>
-        <button onClick={handleBackToMain} className="btn btn-secondary">返回主页</button>
-      </div>
-      
       <div className="page-content">
         {loading ? (
           <div className="card">
@@ -68,7 +63,7 @@ function TodayWork() {
         ) : error ? (
           <div className="card">
             <div className="card-body text-danger text-center">
-              <p>获取数据失败: {error}</p>
+              <p>获取今日任务失败: {error}</p>
               <button
                 onClick={() => window.location.reload()}
                 className="btn btn-primary"

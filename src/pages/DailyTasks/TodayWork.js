@@ -103,7 +103,7 @@ function TodayWork() {
                               {" "}
                               <h3>
                                 <span className="subtask-order">
-                                  任务{subTask.order}
+                                  任务{subTask.order}:
                                 </span>
                                 {subTask.title}
                               </h3>{" "}

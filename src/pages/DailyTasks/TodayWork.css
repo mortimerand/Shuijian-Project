@@ -52,12 +52,17 @@
   transition: all 0.3s ease;
   position: relative;
   border-left: 3px solid transparent;
+  line-height: 1.8; /* 增加子任务卡片内的整体行高 */
 }
 
 .subtask-card:hover {
   background-color: #f5f5f5;
   border-left-color: var(--primary-color);
   transform: translateX(4px);
+}
+
+.subtask-header {
+  margin-bottom: 12px; /* 增加标题区域与描述之间的间距 */
 }
 
 .subtask-header h3 {
@@ -68,6 +73,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  line-height: 1.4;
 }
 
 .subtask-order {

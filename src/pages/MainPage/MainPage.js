@@ -24,9 +24,9 @@ function MainPage() {
     },
     {
       id: 3,
-      title: '列表测试',
+      title: '资料管理',
       description: '查看移动端列表展示效果',
-      route: '/list-test',
+      route: '/document-manage',
       icon: '📋'
     },
     {

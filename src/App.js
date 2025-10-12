@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage.js';
 import AIChat from './pages/AIChat/AIChat.js';
-import ListTest from './pages/ListTest/ListTest.js';
+import DocumentManage from './pages/Document/DocumentManage.js';
 import ProfilePage from './pages/ProfilePage/ProfilePage.js';
 import DailyTasks from './pages/DailyTasks/DailyTasks.js';
 import Login from './pages/Login/Login.js';
@@ -30,9 +30,9 @@ function App() {
               <DailyTasks />
             </ProtectedRoute>
           } />
-          <Route path="/list-test" element={
+          <Route path="/document-manage" element={
             <ProtectedRoute>
-              <ListTest />
+              <DocumentManage />
             </ProtectedRoute>
           } />
           <Route path="/profile" element={

@@ -105,6 +105,67 @@
   padding-left: 25px !important;
 }
 
+/* noNormal 任务卡片样式 */
+.task-card-no-normal {
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #fff8f8, #fff0f0);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.task-card-no-normal:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.task-card-no-normal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--danger-color), #ff8a80);
+}
+
+.task-name-no-normal {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.subtask-card-no-normal {
+  padding: 16px 20px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background-color: #fff5f5;
+  transition: all 0.3s ease;
+  position: relative;
+  border-left: 3px solid transparent;
+  line-height: 1.8;
+}
+
+.subtask-card-no-normal:hover {
+  background-color: #ffebee;
+  border-left-color: var(--danger-color);
+  transform: translateX(4px);
+}
+
+.subtask-order-no-normal {
+  background-color: var(--danger-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
+}
+
 .no-subtasks {
   text-align: center;
   color: var(--text-tertiary);
@@ -157,6 +218,8 @@
 .slide-in {
   animation: slideIn 0.4s ease-out;
 }
+
+
 
 @keyframes pulse {
   0%, 100% {

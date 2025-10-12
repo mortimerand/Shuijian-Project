@@ -61,7 +61,7 @@ function DailyTasks() {
         <div className="subpages-content">
           <Routes>
             {/* 默认路由到任务清单页面 */}
-            <Route path="" element={<TodayTask />} />
+            <Route path="" element={<TodayWork />} />
             <Route path="task-list" element={<TaskList />} />
             <Route path="today-tasks" element={<TodayTask />} />
             <Route path="today-work" element={<TodayWork />} />

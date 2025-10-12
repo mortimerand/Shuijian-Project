@@ -64,6 +64,7 @@ function DailyTasks() {
             <Route path="" element={<TodayTask />} />
             <Route path="task-list" element={<TaskList />} />
             <Route path="today-tasks" element={<TodayTask />} />
+            <Route path="today-work" element={<TodayWork />} />
             <Route path="construction-log" element={<ConstructionLog />} />
             <Route path="progress-summary" element={<ProgressSummary />} />
           </Routes>

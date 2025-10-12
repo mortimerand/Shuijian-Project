@@ -281,7 +281,7 @@ body {
 }
 
 /* 响应式设计 */
-@media (max-width: 480px) {
+@media (max-width: 200px) {
   .page-header h1 {
     font-size: 18px;
   }

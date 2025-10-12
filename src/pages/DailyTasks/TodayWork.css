@@ -1,0 +1,203 @@
+/* TodayWork 页面特有样式 */
+.tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.task-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.task-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.task-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary-color), #64b5f6);
+}
+
+.task-name {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.subtasks-container {
+  padding: 10px 0;
+}
+
+.subtask-card {
+  padding: 16px 20px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+  position: relative;
+  border-left: 3px solid transparent;
+}
+
+.subtask-card:hover {
+  background-color: #f5f5f5;
+  border-left-color: var(--primary-color);
+  transform: translateX(4px);
+}
+
+.subtask-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subtask-order {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
+}
+
+.subtask-description {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 8px;
+  padding-left: 50px;
+}
+
+.no-subtasks {
+  text-align: center;
+  color: var(--text-tertiary);
+  padding: 40px;
+  font-style: italic;
+}
+
+/* 加载状态样式优化 */
+.card-loading {
+  text-align: center;
+  padding: 40px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-text {
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+/* 错误状态样式优化 */
+.card-error {
+  border-color: var(--danger-color);
+  box-shadow: 0 0 0 1px rgba(244, 67, 54, 0.1);
+}
+
+/* 空状态样式优化 */
+.card-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f8f9fa;
+  border: 2px dashed var(--border-color);
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-text {
+  color: var(--text-secondary);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* 动画效果 */
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .tasks-container {
+    padding: 10px;
+  }
+  
+  .task-card {
+    border-radius: 8px;
+  }
+  
+  .task-name {
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+  
+  .subtask-card {
+    padding: 12px 16px;
+  }
+  
+  .subtask-header h3 {
+    font-size: 14px;
+  }
+  
+  .subtask-description {
+    font-size: 13px;
+    padding-left: 0;
+  }
+}

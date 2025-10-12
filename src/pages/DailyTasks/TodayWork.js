@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./DailyTasks.css";
+import "./TodayWork.css"
 
 function TodayWork() {
   const navigate = useNavigate();
@@ -56,14 +57,6 @@ function TodayWork() {
   return (
     <div className="page-container">
       {" "}
-      <div className="page-header">
-        <button onClick={handleBackToMain} className="back-button">
-          {" "}
-          ← 返回{" "}
-        </button>
-        <h1>今日任务</h1>
-        <div style={{ width: 40 }}></div> {/* 占位，保持标题居中 */}{" "}
-      </div>
       <div className="page-content">
         {loading ? (
           <div className="card card-loading">

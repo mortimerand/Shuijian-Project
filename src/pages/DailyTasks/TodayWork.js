@@ -24,7 +24,7 @@ function TodayWork() {
         const data = await response.json();
         
         // 检查返回的状态码
-        if (data.code === "200" && data.message === "true" && typeof data.data === 'object') {
+        if (data.code === "200" && data.data) {
           // 有任务时的数据处理
           // 如果data.data是数组，直接使用；如果是对象，转换为单元素数组
           const tasks = Array.isArray(data.data) ? data.data : [data.data];

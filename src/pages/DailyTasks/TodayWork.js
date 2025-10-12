@@ -26,11 +26,11 @@ function TodayWork() {
 
         const data = await response.json();
         // 检查返回的状态码
-        if (data.code === "200") {
+        if (data.code === "200" && data.data) {
           // 有任务时的数据处理
           // 确保 normal 和 unNormal 始终是数组格式
-          const normals = data.normal || [];
-          const unNormals = data.unNormal || [];
+          const normals = data.data.normal || [];
+          const unNormals = data.data.unNormal || [];
           
           // 处理单个对象的情况
           setNormalTasks(Array.isArray(normals) ? normals : [normals]);

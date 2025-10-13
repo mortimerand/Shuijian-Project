@@ -110,7 +110,7 @@ export default function DManageComponent() {
             下载后可根据实际需求修改模板内容
           </li>
           <li style={{ marginBottom: "8px" }}>
-            如有特殊模板需求，请联系管理员
+            如有其他模板需求，请联系管理员
           </li>
         </ul>
       </div>

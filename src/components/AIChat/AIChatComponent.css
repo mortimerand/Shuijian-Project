@@ -147,7 +147,7 @@
 }
 
 /* 响应式设计 */
-@media (max-width: 200px) {
+@media (max-width:768px) {
   .ai-chat-container {
     max-width: 100%;
     box-shadow: none;

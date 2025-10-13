@@ -336,7 +336,7 @@ function TaskList() {
   const [galleryImages, setGalleryImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [hasStagedFiles, setHasStagedFiles] = useState(false); // 标记是否有暂存文件
-  const [showAdditionalTemplates, setShowAdditionalTemplates] = useState(false); //控制任务额外模板的显隐
+  const [showAdditionalTemplates, setShowAdditionalTemplates] = useState(null); //修改为存储当前打开的任务ID
   const [currentTemplateType, setCurrentTemplateType] = useState(null); // 当前预览的模板类型
   const [showFilePreviewModal, setShowFilePreviewModal] = useState(false); // 文件预览模态框
   const [currentTemplateFile, setCurrentTemplateFile] = useState(null); // 当前预览的文件
@@ -366,21 +366,6 @@ function TaskList() {
       });
     };
     updateTaskStatuses();
-  }, []);
-
-  // 使用 useCallback 优化函数，避免不必要的重渲染
-  const toggleTaskStatus = useCallback((id) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) => {
-        if (task.id === id) {
-          return {
-            ...task,
-            status: task.status === "completed" ? "pending" : "completed",
-          };
-        }
-        return task;
-      })
-    );
   }, []);
 
   const handleAddTask = useCallback(
@@ -473,6 +458,29 @@ function TaskList() {
     [tasks]
   );
 
+  // 检查任务是否所有必要的项都有文件上传
+  const checkAllRequiredItemsUploaded = useCallback((task) => {
+    // 检查主模板项 - 确保每个主模板都有至少一个上传成功的文件
+    const mainTemplatesAllUploaded = task.templateImages.every(
+      (img) =>
+        img.uploadedFiles &&
+        img.uploadedFiles.length > 0 &&
+        img.uploadedFiles.some((f) => f.status === "done")
+    );
+
+    // 检查额外模板项（如果有）- 确保每个额外模板都有至少一个上传成功的文件
+    const additionalTemplatesAllUploaded =
+      !task.additionalTemplateImages ||
+      task.additionalTemplateImages.every(
+        (img) =>
+          img.uploadedFiles &&
+          img.uploadedFiles.length > 0 &&
+          img.uploadedFiles.some((f) => f.status === "done")
+      );
+
+    return mainTemplatesAllUploaded && additionalTemplatesAllUploaded;
+  }, []);
+
   // 添加文件上传到后端的函数
   const uploadFileToServer = useCallback(async (taskData) => {
     try {
@@ -524,23 +532,22 @@ function TaskList() {
     }
   }, []);
 
-  // 实现总提交功能，返回一个List
-  const submitAllFiles = useCallback(async () => {
-    // 收集所有暂存的文件
-    const taskDataMap = new Map(); // 使用任务ID作为key
-    const results = [];
+  // 实现单任务提交功能
+  const submitTaskFiles = useCallback(
+    async (taskId) => {
+      const task = tasks.find((t) => t.id === taskId);
+      if (!task) return;
 
-    // 处理所有带暂存文件的任务
-    tasks.forEach((task) => {
-      const hasStagedFiles =
-        task.templateImages?.some((img) =>
-          img.uploadedFiles?.some((f) => f.status === "staged")
-        ) ||
-        task.additionalTemplateImages?.some((img) =>
-          img.uploadedFiles?.some((f) => f.status === "staged")
-        );
-
-      if (!hasStagedFiles) return;
+      // 收集该任务的所有暂存文件
+      const taskData = {
+        taskId: task.id,
+        taskType: "",
+        images: [],
+        imagesSubtasks: [],
+        docs: [],
+        docsSubtasks: [],
+        fileMap: new Map(),
+      };
 
       // 获取任务类型编码
       let taskTypeCode = "";
@@ -552,22 +559,26 @@ function TaskList() {
         }
       }
 
-      if (!taskTypeCode) return;
-
-      // 初始化任务数据
-      if (!taskDataMap.has(task.id)) {
-        taskDataMap.set(task.id, {
-          taskId: task.id,
-          taskType: taskTypeCode,
-          images: [],
-          imagesSubtasks: [],
-          docs: [],
-          docsSubtasks: [],
-          fileMap: new Map(), // 存储文件信息用于状态更新
-        });
+      if (!taskTypeCode) {
+        message.error("无法获取任务类型编码");
+        return;
       }
 
-      const taskData = taskDataMap.get(task.id);
+      taskData.taskType = taskTypeCode;
+
+      // 检查是否有暂存文件
+      const hasStagedFiles =
+        task.templateImages?.some((img) =>
+          img.uploadedFiles?.some((f) => f.status === "staged")
+        ) ||
+        task.additionalTemplateImages?.some((img) =>
+          img.uploadedFiles?.some((f) => f.status === "staged")
+        );
+
+      if (!hasStagedFiles) {
+        message.info("该任务没有暂存的文件需要提交");
+        return;
+      }
 
       // 处理主模板文件
       if (task.templateImages) {
@@ -636,24 +647,18 @@ function TaskList() {
           }
         });
       }
-    });
 
-    if (taskDataMap.size === 0) {
-      message.info("没有暂存的文件需要提交");
-      return [];
-    }
+      // 更新所有文件状态为上传中
+      setTasks((prevTasks) => {
+        const newTasks = [...prevTasks];
+        const taskIndex = newTasks.findIndex((t) => t.id === taskId);
 
-    // 更新所有文件状态为上传中
-    setTasks((prevTasks) => {
-      const newTasks = [...prevTasks];
-
-      newTasks.forEach((task) => {
-        if (taskDataMap.has(task.id)) {
-          const taskData = taskDataMap.get(task.id);
+        if (taskIndex !== -1) {
+          const updatedTask = { ...newTasks[taskIndex] };
 
           // 更新主模板文件状态
-          if (task.templateImages) {
-            task.templateImages.forEach((img) => {
+          if (updatedTask.templateImages) {
+            updatedTask.templateImages.forEach((img) => {
               if (img.uploadedFiles) {
                 img.uploadedFiles.forEach((file) => {
                   if (taskData.fileMap.has(file.id)) {
@@ -665,8 +670,8 @@ function TaskList() {
           }
 
           // 更新额外模板文件状态
-          if (task.additionalTemplateImages) {
-            task.additionalTemplateImages.forEach((img) => {
+          if (updatedTask.additionalTemplateImages) {
+            updatedTask.additionalTemplateImages.forEach((img) => {
               if (img.uploadedFiles) {
                 img.uploadedFiles.forEach((file) => {
                   if (taskData.fileMap.has(file.id)) {
@@ -676,17 +681,15 @@ function TaskList() {
               }
             });
           }
+
+          newTasks[taskIndex] = updatedTask;
         }
+
+        return newTasks;
       });
 
-      return newTasks;
-    });
-
-    // 按任务上传数据
-    for (const [taskId, taskData] of taskDataMap.entries()) {
       // 移除不需要提交的字段
       const { taskId: id, fileMap, ...submitData } = taskData;
-
       const result = await uploadFileToServer(submitData);
 
       // 更新文件状态
@@ -720,36 +723,63 @@ function TaskList() {
               }
             }
           });
+
+          // 只有在文件上传成功时才检查并更新任务状态
+          if (result.success) {
+            const allRequiredItemsUploaded =
+              checkAllRequiredItemsUploaded(task);
+            newTasks[taskIndex].status = allRequiredItemsUploaded
+              ? "completed"
+              : "pending";
+          }
         }
 
         return newTasks;
       });
 
-      // 记录结果
+      // 重置暂存标记
+      setHasStagedFiles(false);
+
+      // 显示上传结果
       if (result.success) {
-        results.push({ taskId, success: true });
+        message.success(`${task.title} 的文件上传成功`);
       } else {
-        results.push({ taskId, success: false, error: result.error });
+        message.error(`${task.title} 的文件上传失败: ${result.error}`);
       }
-    }
+    },
+    [tasks, taskTypeMapping, taskDataMapping, fixedTasks, uploadFileToServer]
+  );
 
-    // 重置暂存标记
-    setHasStagedFiles(false);
+  // 修改自动检查任务状态的useEffect，确保任务状态只由文件上传情况决定
+  useEffect(() => {
+    // 移除定期检查，只保留初始检查
+    const updateTaskStatuses = () => {
+      setTasks((prevTasks) => {
+        const [updatedTasks, hasChanges] = prevTasks.reduce(
+          ([tasksAcc, changes], task) => {
+            const allItemsUploaded = checkAllRequiredItemsUploaded(task);
+            const newStatus = allItemsUploaded ? "completed" : "pending";
+            if (task.status !== newStatus) {
+              return [[...tasksAcc, { ...task, status: newStatus }], true];
+            }
+            return [[...tasksAcc, task], changes];
+          },
+          [[], false]
+        );
+        return hasChanges ? updatedTasks : prevTasks;
+      });
+    };
 
-    // 显示总体上传结果
-    const successCount = results.filter((r) => r.success).length;
-    message.success(`${successCount}/${results.length} 个任务的数据上传成功`);
+    // 只进行初始检查，不设置定期检查
+    updateTaskStatuses();
 
-    // 返回上传结果List
-    return results;
-  }, [tasks, taskTypeMapping, taskDataMapping, fixedTasks, uploadFileToServer]);
+    // 清理函数
+    return () => {};
+  }, [checkAllRequiredItemsUploaded]);
 
   // 实现通用的额外模板处理函数
   const toggleAdditionalTemplates = useCallback((taskId) => {
-    setShowAdditionalTemplates((prev) => ({
-      ...prev,
-      [taskId]: !prev[taskId],
-    }));
+    setShowAdditionalTemplates((prev) => (prev === taskId ? null : taskId));
   }, []);
 
   // 修改删除上传文件的函数
@@ -936,18 +966,33 @@ function TaskList() {
 
   // 图片上传模态框配置
   const imageUploadModalProps = {
-    title: getCurrentTask()
-      ? `${getCurrentTask().title} - 模板图片与数据上传`
-      : "",
+    title: "日常任务资料",
     open: showImageUploadModal,
-    onCancel: closeImageUploadModal,
+    onCancel: () => setShowImageUploadModal(false),
     footer: null,
-    width: "90%",
+    width: 800,
     centered: true,
-    modalRender: (node) => node, // 使用Portal确保定位正确
-    style: {
-      maxHeight: "90vh",
-      overflowY: "auto",
+    maxHeight: "80vh",
+    styles: {
+      body: {
+        overflowY: "auto",
+      },
+    },
+  };
+
+  // 添加额外模板模态框的配置
+  const additionalTemplatesModalProps = {
+    title: "验收阶段资料",
+    open: !!showAdditionalTemplates,
+    onCancel: () => setShowAdditionalTemplates(null),
+    footer: null,
+    width: 800,
+    centered: true,
+    maxHeight: "80vh",
+    styles: {
+      body: {
+        overflowY: "auto",
+      },
     },
   };
 
@@ -994,10 +1039,9 @@ function TaskList() {
     centered: true,
   };
 
-  //获取新阶段标题
   const getAdditionalTemplateTitle = useCallback(() => {
     const currentTask = getCurrentTask();
-    if (!currentTask) return "下一阶段模板图片:";
+    if (!currentTask) return "";
 
     // 通过任务标题查找对应的任务ID
     const taskType = fixedTasks.find((t) => t.title === currentTask.title);
@@ -1005,7 +1049,7 @@ function TaskList() {
       return additionalTemplateTitles[taskType.id];
     }
 
-    return "下一阶段模板图片:"; // 默认标题
+    return ""; // 默认返回空标题
   }, [getCurrentTask, fixedTasks, additionalTemplateTitles]);
 
   return (
@@ -1054,14 +1098,6 @@ function TaskList() {
           >
             {/* 任务头部 */}
             <div className="task-header">
-              <label className={`task-checkbox ${getStatusClass(task.status)}`}>
-                <input
-                  type="checkbox"
-                  checked={task.status === "completed"}
-                  onChange={() => toggleTaskStatus(task.id)}
-                />
-                <span className="checkbox-custom"></span>
-              </label>
               <div className="task-info">
                 <h3 className={`task-title ${getStatusClass(task.status)}`}>
                   {task.title}
@@ -1084,13 +1120,14 @@ function TaskList() {
             </div>
 
             {/* 模板图片和上传数据按钮 */}
+            {/* 模板图片和上传数据按钮 */}
             {task.templateImages && task.templateImages.length > 0 && (
               <div className="task-actions">
                 <button
                   className="btn btn-secondary"
                   onClick={() => openImageUploadModal(task.id)}
                 >
-                  查看模板与上传数据
+                  点击进入日常任务
                 </button>
                 {/* 通用的额外模板按钮，所有有额外模板的任务都显示 */}
                 {task.additionalTemplateImages &&
@@ -1103,28 +1140,12 @@ function TaskList() {
                       }}
                       style={{ marginLeft: "10px" }}
                     >
-                      {showAdditionalTemplates[task.id]
-                        ? `点击退出验收阶段`
-                        : `点击进入验收阶段`}
+                      {showAdditionalTemplates === task.id}
+                      点击进入验收任务
                     </button>
                   )}
               </div>
             )}
-
-            {/* 通用的额外模板图片容器 */}
-            {task.additionalTemplateImages &&
-              task.additionalTemplateImages.length > 0 &&
-              showAdditionalTemplates[task.id] && (
-                <div
-                  className="additional-templates"
-                  style={{
-                    marginTop: "10px",
-                    padding: "10px",
-                    backgroundColor: "#f5f5f5",
-                    borderRadius: "4px",
-                  }}
-                ></div>
-              )}
           </div>
         ))}
       </div>
@@ -1133,7 +1154,7 @@ function TaskList() {
       <div className="task-stats">
         <div className="stat-item">
           <span className="stat-number">{tasks.length}</span>
-          <span className="stat-label">总任务数</span>
+          <span className="stat-label">今日任务安排</span>
         </div>
         <div className="stat-item">
           <span className="stat-number">
@@ -1148,29 +1169,6 @@ function TaskList() {
           <span className="stat-label">未完成</span>
         </div>
       </div>
-
-      {/* 添加总提交按钮 */}
-      {hasStagedFiles && (
-        <div
-          className="submit-all-container"
-          style={{
-            textAlign: "center",
-            marginTop: "20px",
-            marginBottom: "20px",
-          }}
-        >
-          <button
-            className="btn btn-primary"
-            onClick={submitAllFiles}
-            style={{
-              padding: "10px 24px",
-              fontSize: "16px",
-            }}
-          >
-            提交所有暂存文件
-          </button>
-        </div>
-      )}
 
       {/* 模板图片与上传弹窗 - 使用Ant Design的Modal组件 */}
       <Modal {...imageUploadModalProps}>
@@ -1265,190 +1263,28 @@ function TaskList() {
                   </div>
                 </div>
               ))}
+            </div>
 
-              {/* 通用的额外模板图片上传区域 */}
-              {getCurrentTask().additionalTemplateImages &&
-                getCurrentTask().additionalTemplateImages.length > 0 &&
-                showAdditionalTemplates[getCurrentTask().id] && (
-                  <div
-                    style={{
-                      marginTop: "20px",
-                      paddingTop: "20px",
-                      borderTop: "1px solid #eee",
-                    }}
-                  >
-                    <h4 style={{ margin: "0 0 15px 0" }}>
-                      {getAdditionalTemplateTitle()}
-                    </h4>
-                    {getCurrentTask().additionalTemplateImages.map(
-                      (image, imageIndex) => (
-                        <div
-                          key={`additional-${imageIndex}`}
-                          className="image-upload-pair"
-                        >
-                          <div className="image-container">
-                            <div className="image-header">
-                              <span className="image-description">
-                                {image.desc}
-                              </span>
-                            </div>
-                            <div
-                              className="image-thumbnail"
-                              onClick={() => {
-                                previewTemplate(image, getCurrentTask().id, 0);
-                              }}
-                            >
-                              {image.type === "image" ? (
-                                <img src={image.url} alt={`模板`} />
-                              ) : (
-                                <div className="file-placeholder">
-                                  <span className="file-icon">📄</span>
-                                  <span className="file-type">
-                                    {image.url.split(".").pop().toUpperCase()}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="image-upload-area">
-                            <label className="upload-button">
-                              <input
-                                type="file"
-                                multiple
-                                capture="environment"
-                                onChange={(e) => {
-                                  // 使用专门的处理函数处理额外模板的文件上传
-                                  const currentTask = getCurrentTask();
-                                  if (currentTask) {
-                                    // 创建新的文件对象并添加到额外模板中
-                                    const files = Array.from(e.target.files);
-                                    const newFiles = files.map((file) => ({
-                                      id: generateUUID(),
-                                      name: file.name,
-                                      size: file.size,
-                                      type: file.type,
-                                      url: URL.createObjectURL(file),
-                                      status: "staged", // 标记为暂存状态
-                                      fileData: file, // 保存文件对象用于后续提交
-                                      taskTypeCode: null, // 后续提交时填充
-                                      taskNeedDataCode: null, // 后续提交时填充
-                                    }));
-
-                                    // 更新状态
-                                    setTasks((prevTasks) =>
-                                      prevTasks.map((task) => {
-                                        if (task.id === currentTask.id) {
-                                          const updatedAdditionalTemplates = [
-                                            ...task.additionalTemplateImages,
-                                          ];
-                                          if (
-                                            !updatedAdditionalTemplates[
-                                              imageIndex
-                                            ].uploadedFiles
-                                          ) {
-                                            updatedAdditionalTemplates[
-                                              imageIndex
-                                            ].uploadedFiles = [];
-                                          }
-                                          updatedAdditionalTemplates[
-                                            imageIndex
-                                          ].uploadedFiles = [
-                                            ...updatedAdditionalTemplates[
-                                              imageIndex
-                                            ].uploadedFiles,
-                                            ...newFiles,
-                                          ];
-                                          return {
-                                            ...task,
-                                            additionalTemplateImages:
-                                              updatedAdditionalTemplates,
-                                          };
-                                        }
-                                        return task;
-                                      })
-                                    );
-
-                                    // 设置有暂存文件的标记
-                                    setHasStagedFiles(true);
-                                    message.success(
-                                      '文件已暂存，点击"提交所有文件"按钮上传到服务器'
-                                    );
-                                  }
-                                }}
-                              />
-                              <span>+ 暂存相关文件</span>
-                            </label>
-
-                            {/* 显示已上传的额外模板文件 */}
-                            {getCurrentTask().additionalTemplateImages[
-                              imageIndex
-                            ] &&
-                              getCurrentTask().additionalTemplateImages[
-                                imageIndex
-                              ].uploadedFiles &&
-                              getCurrentTask().additionalTemplateImages[
-                                imageIndex
-                              ].uploadedFiles.length > 0 && (
-                                <div className="image-uploaded-files">
-                                  {getCurrentTask().additionalTemplateImages[
-                                    imageIndex
-                                  ].uploadedFiles.map((file) => (
-                                    <div
-                                      key={file.id}
-                                      className={`uploaded-file-item file-${
-                                        file.status || "uploaded"
-                                      }`}
-                                    >
-                                      <span className="file-name">
-                                        {file.name}
-                                      </span>
-                                      <span className="file-size">
-                                        {(file.size / 1024).toFixed(1)}KB
-                                      </span>
-                                      {file.status === "staged" && (
-                                        <span className="file-status staged">
-                                          已暂存
-                                        </span>
-                                      )}
-                                      {file.status === "uploading" && (
-                                        <span className="file-status uploading">
-                                          上传中...
-                                        </span>
-                                      )}
-                                      {file.status === "success" && (
-                                        <span className="file-status success">
-                                          上传成功
-                                        </span>
-                                      )}
-                                      {file.status === "error" && (
-                                        <span className="file-status error">
-                                          上传失败
-                                        </span>
-                                      )}
-                                      <button
-                                        className="delete-file-btn"
-                                        onClick={() =>
-                                          removeUploadedFile(
-                                            getCurrentTask().id,
-                                            imageIndex,
-                                            file.id,
-                                            true // 标记为额外模板
-                                          )
-                                        }
-                                      >
-                                        删除
-                                      </button>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                          </div>
-                        </div>
-                      )
-                    )}
-                  </div>
-                )}
+            {/* 添加任务级提交按钮 */}
+            <div
+              className="task-submit-container"
+              style={{
+                marginTop: "20px",
+                paddingTop: "20px",
+                borderTop: "1px solid #eee",
+                textAlign: "center",
+              }}
+            >
+              <button
+                className="btn btn-primary"
+                onClick={() => submitTaskFiles(getCurrentTask().id)}
+                style={{
+                  padding: "10px 24px",
+                  fontSize: "16px",
+                }}
+              >
+                提交该任务的所有文件
+              </button>
             </div>
           </div>
         )}
@@ -1503,6 +1339,212 @@ function TaskList() {
                 <p>点击"下载文件"按钮可获取该模板文件</p>
               </div>
             </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* 新增：额外模板模态框 */}
+      <Modal {...additionalTemplatesModalProps}>
+        {showAdditionalTemplates && (
+          <div className="additional-templates-modal">
+            {tasks.map((task) => {
+              if (task.id === showAdditionalTemplates) {
+                return (
+                  <div key={task.id}>
+                    <h3 style={{ marginBottom: "16px" }}>
+                      {task.title} - 验收阶段
+                    </h3>
+                    {task.additionalTemplateImages &&
+                      task.additionalTemplateImages.map((image, imageIndex) => (
+                        <div key={imageIndex} className="image-upload-pair">
+                          <div className="image-container">
+                            <div className="image-header">
+                              <span className="image-description">
+                                {image.desc}
+                              </span>
+                            </div>
+                            <div
+                              className="image-thumbnail"
+                              onClick={() => {
+                                if (image.type === "image") {
+                                  previewTemplate(image, task.id);
+                                } else {
+                                  downloadTemplateFile(image.url);
+                                }
+                              }}
+                            >
+                              {image.type === "image" ? (
+                                <img src={image.url} alt={image.desc} />
+                              ) : (
+                                <div className="file-placeholder">
+                                  <span className="file-icon">📄</span>
+                                  <span className="file-type">
+                                    {image.url.split("#").pop().toUpperCase()}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="image-upload-area">
+                            {/* 保留原有的上传区域代码 */}
+                            <label className="upload-button">
+                              <input
+                                type="file"
+                                multiple
+                                capture="environment"
+                                onChange={(e) => {
+                                  // 使用专门的处理函数处理额外模板的文件上传
+                                  const currentTask = task;
+                                  if (currentTask) {
+                                    // 创建新的文件对象并添加到额外模板中
+                                    const files = Array.from(e.target.files);
+                                    const newFiles = files.map((file) => ({
+                                      id: generateUUID(),
+                                      name: file.name,
+                                      size: file.size,
+                                      type: file.type,
+                                      url: URL.createObjectURL(file),
+                                      status: "staged", // 标记为暂存状态
+                                      fileData: file, // 保存文件对象用于后续提交
+                                      taskTypeCode: null, // 后续提交时填充
+                                      taskNeedDataCode: null, // 后续提交时填充
+                                    }));
+
+                                    // 更新状态
+                                    setTasks((prevTasks) =>
+                                      prevTasks.map((t) => {
+                                        if (t.id === currentTask.id) {
+                                          const updatedAdditionalTemplates = [
+                                            ...t.additionalTemplateImages,
+                                          ];
+                                          if (
+                                            !updatedAdditionalTemplates[
+                                              imageIndex
+                                            ].uploadedFiles
+                                          ) {
+                                            updatedAdditionalTemplates[
+                                              imageIndex
+                                            ].uploadedFiles = [];
+                                          }
+                                          updatedAdditionalTemplates[
+                                            imageIndex
+                                          ].uploadedFiles = [
+                                            ...updatedAdditionalTemplates[
+                                              imageIndex
+                                            ].uploadedFiles,
+                                            ...newFiles,
+                                          ];
+                                          return {
+                                            ...t,
+                                            additionalTemplateImages:
+                                              updatedAdditionalTemplates,
+                                          };
+                                        }
+                                        return t;
+                                      })
+                                    );
+
+                                    // 设置有暂存文件的标记
+                                    setHasStagedFiles(true);
+                                    message.success(
+                                      '文件已暂存，点击"提交所有文件"按钮上传到服务器'
+                                    );
+                                  }
+                                }}
+                              />
+                              <span>+ 暂存相关文件</span>
+                            </label>
+
+                            {/* 显示已上传的额外模板文件 */}
+                            {task.additionalTemplateImages[imageIndex] &&
+                              task.additionalTemplateImages[imageIndex]
+                                .uploadedFiles &&
+                              task.additionalTemplateImages[imageIndex]
+                                .uploadedFiles.length > 0 && (
+                                <div className="image-uploaded-files">
+                                  {task.additionalTemplateImages[
+                                    imageIndex
+                                  ].uploadedFiles.map((file) => (
+                                    <div
+                                      key={file.id}
+                                      className={`uploaded-file-item file-${
+                                        file.status || "uploaded"
+                                      }`}
+                                    >
+                                      <span className="file-name">
+                                        {file.name}
+                                      </span>
+                                      <span className="file-size">
+                                        {(file.size / 1024).toFixed(1)}KB
+                                      </span>
+                                      {file.status === "staged" && (
+                                        <span className="file-status staged">
+                                          已暂存
+                                        </span>
+                                      )}
+                                      {file.status === "uploading" && (
+                                        <span className="file-status uploading">
+                                          上传中...
+                                        </span>
+                                      )}
+                                      {file.status === "success" && (
+                                        <span className="file-status success">
+                                          上传成功
+                                        </span>
+                                      )}
+                                      {file.status === "error" && (
+                                        <span className="file-status error">
+                                          上传失败
+                                        </span>
+                                      )}
+                                      <button
+                                        className="delete-file-btn"
+                                        onClick={() =>
+                                          removeUploadedFile(
+                                            task.id,
+                                            imageIndex,
+                                            file.id,
+                                            true // 标记为额外模板
+                                          )
+                                        }
+                                      >
+                                        删除
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                          </div>
+                        </div>
+                      ))}
+
+                    {/* 添加任务级提交按钮 */}
+                    <div
+                      className="task-submit-container"
+                      style={{
+                        marginTop: "20px",
+                        paddingTop: "20px",
+                        borderTop: "1px solid #eee",
+                        textAlign: "center",
+                      }}
+                    >
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => submitTaskFiles(task.id)}
+                        style={{
+                          padding: "10px 24px",
+                          fontSize: "16px",
+                        }}
+                      >
+                        提交该任务的所有文件
+                      </button>
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })}
           </div>
         )}
       </Modal>

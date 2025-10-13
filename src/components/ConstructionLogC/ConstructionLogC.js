@@ -41,7 +41,7 @@ function ConstructionLogC() {
 
     try {
       // 根据项目中其他API调用的模式，使用相应的接口地址
-      const response = await fetch("api/daily_task/export", {
+      const response = await fetch("/api/daily_task/export", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

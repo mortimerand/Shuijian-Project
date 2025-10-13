@@ -771,7 +771,7 @@
 }
 
 /* 移动端响应式调整 */
-@media (max-width: 200px) {
+@media (max-width: 768px) {
   .page-header {
     padding: var(--spacing-sm);
   }

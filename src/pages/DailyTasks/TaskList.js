@@ -1,6 +1,56 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Modal, message } from "antd";
 import "./DailyTasks.css";
+// 导入所有模板文件
+// 桩点放样相关模板
+import 施202061_工程测量控制点交桩记录表_xls from "../../template/1.2桩点放样/施2020-61 工程测量控制点交桩记录表.xls";
+import 施工放样测量记录表_xlsx from "../../template/1.2桩点放样/施工放样测量记录表.xlsx";
+
+// 成桩技术交底相关模板
+import 交底图片_png from "../../template/2.2成桩技术交底/交底图片.png";
+import 人工挖孔桩技术交底_docx from "../../template/2.2成桩技术交底/人工挖孔桩技术交底.docx";
+
+// 成桩（日常）相关模板
+import 施202076_现拌混凝土施工记录_xls from "../../template/3.1成桩（日常）/施2020-76 现拌混凝土施工记录.xls";
+import 现场作业照片_png from "../../template/3.1成桩（日常）/现场作业照片.png";
+
+// 成桩（验收）相关模板
+import 成桩桩长统计表_xlsx from "../../template/3.2成桩（验收）/成桩桩长统计表.xlsx";
+import 桩长统计表_png from "../../template/3.2成桩（验收）/桩长统计表.png";
+import 现场验收照片_jpg_成桩验收 from "../../template/3.2成桩（验收）/现场验收照片.jpg";
+
+// 钢筋笼钢筋存储相关模板
+import 存储场地照片_jpg from "../../template/4.2钢筋笼钢筋存储/存储场地照片.jpg";
+
+// 钢筋笼钢筋进场（日常）相关模板
+import 施202024a_原材料试块试件见证取样送检委托书_xls from "../../template/5.1钢筋笼钢筋进场（日常）/施2020-24a 原材料、试块、试件见证取样送检委托书.xls";
+import 试验报告单_png from "../../template/5.1钢筋笼钢筋进场（日常）/试验报告单.png";
+import 质量证明书_png from "../../template/5.1钢筋笼钢筋进场（日常）/质量证明书.png";
+
+// 钢筋笼钢筋进场（验收）相关模板
+import 施202023_建筑安装原材料设备及配件产品进场验收记录_xls from "../../template/5.2钢筋笼钢筋进场（验收）/施2020-23 建筑、安装原材料、设备及配件产品进场验收记录.xls";
+import 现场验收照片_png_钢筋笼进场 from "../../template/5.2钢筋笼钢筋进场（验收）/现场验收照片.png";
+
+// 钢筋笼焊接技术交底相关模板
+import 现场技术交底照片_png from "../../template/6.2钢筋笼焊接技术交底 （验收）/现场技术交底照片.png";
+
+// 钢筋笼生产（日常）相关模板
+import 施202024b_钢筋焊接连接接头工艺检验见证取样送检委托书_xls from "../../template/7.1钢筋笼生产（日常）/施2020-24b 钢筋焊接连接接头工艺检验见证取样送检委托书.xls";
+import 检查照片_png from "../../template/7.1钢筋笼生产（日常）/检查照片.png";
+
+// 钢筋笼生产（验收）相关模板
+import 现场验收照片_jpg_钢筋笼生产 from "../../template/7.2钢筋笼生产（验收）/现场验收照片.jpg";
+
+// 钢筋笼吊装、混凝土灌注（日常）相关模板
+import 施202075_预拌混凝土施工记录_xls from "../../template/8.1钢筋笼吊装、混凝土灌注（日常）/施2020-75 预拌混凝土施工记录.xls";
+import 施202078_混凝土开盘鉴定_xls from "../../template/8.1钢筋笼吊装、混凝土灌注（日常）/施2020-78 混凝土开盘鉴定.xls";
+import 混凝土灌注照片_png from "../../template/8.1钢筋笼吊装、混凝土灌注（日常）/混凝土灌注照片.png";
+import 钢筋笼吊装照片_png from "../../template/8.1钢筋笼吊装、混凝土灌注（日常）/钢筋笼吊装照片.png";
+
+// 钢筋笼吊装、混凝土灌注（验收）相关模板
+import 施2020111_人工挖孔灌注桩单桩施工记录_xls from "../../template/8.2钢筋笼吊装、混凝土灌注（验收）/施2020-111 人工挖孔灌注桩单桩施工记录.xls";
+import 施202077_混凝土浇灌令_xls from "../../template/8.2钢筋笼吊装、混凝土灌注（验收）/施2020-77 混凝土浇灌令.xls";
+import 浇筑完成后照片_png from "../../template/8.2钢筋笼吊装、混凝土灌注（验收）/浇筑完成后照片.png";
 
 // 生成UUID
 function generateUUID() {
@@ -27,12 +77,12 @@ function TaskList() {
         description: "确定桩基础的准确位置和标高，确保施工符合设计要求",
         templateImages: [
           {
-            url: "/static/template/1.2桩点放样/施2020-61 工程测量控制点交桩记录表.xls",
+            url: 施202061_工程测量控制点交桩记录表_xls,
             desc: "桩点放样工程测量控制点交桩记录表",
             type: "file",
           },
           {
-            url: "/static/template/1.2桩点放样/施工放样测量记录表.xlsx",
+            url: 施工放样测量记录表_xlsx,
             desc: "桩点位放样数据",
             type: "file",
           },
@@ -44,7 +94,7 @@ function TaskList() {
         description: "检查钢筋存储环境是否符合要求，防止钢筋锈蚀和损坏",
         templateImages: [
           {
-            url: "/static/template/4.2钢筋笼钢筋存储/存储场地照片.jpg",
+            url: 存储场地照片_jpg,
             desc: "钢筋笼钢筋存储原材料存储照片",
             type: "image",
           },
@@ -56,29 +106,29 @@ function TaskList() {
         description: "验收进场钢筋的质量、规格和数量，确保符合设计和规范要求",
         templateImages: [
           {
-            url: "/static/template/5.1钢筋笼钢筋进场（日常）/质量证明书.png",
+            url: 质量证明书_png,
             desc: "《出场质量证明书》",
             type: "image",
           },
           {
-            url: "/static/template/5.1钢筋笼钢筋进场（日常）/试验报告单.png",
+            url: 试验报告单_png,
             desc: "《试验报告单》",
             type: "image",
           },
           {
-            url: "/static/template/5.1钢筋笼钢筋进场（日常）/施2020-24a 原材料、试块、试件见证取样送检委托书.xls",
+            url: 施202024a_原材料试块试件见证取样送检委托书_xls,
             desc: "《原材料、试块、试件见证取样送检委托书》",
             type: "file",
           },
         ],
         additionalTemplates: [
           {
-            url: "/static/template/5.2钢筋笼钢筋进场（验收）/现场验收照片.png",
+            url: 现场验收照片_png_钢筋笼进场,
             desc: "钢筋笼进场现场验收照片",
             type: "image",
           },
           {
-            url: "/static/template/5.2钢筋笼钢筋进场（验收）/施2020-23 建筑、安装原材料、设备及配件产品进场验收记录.xls",
+            url: 施202023_建筑安装原材料设备及配件产品进场验收记录_xls,
             desc: "《建筑、安装原材料、设备及配件产品进场验收记录》",
             type: "file",
           },
@@ -91,7 +141,7 @@ function TaskList() {
           "向施工人员详细说明钢筋笼焊接的技术要求、质量标准和安全注意事项",
         templateImages: [
           {
-            url: "/static/template/6.2钢筋笼焊接技术交底 （验收）/现场技术交底照片.png",
+            url: 现场技术交底照片_png,
             desc: "钢筋笼焊接技术交底照片",
             type: "image",
           },
@@ -103,19 +153,19 @@ function TaskList() {
         description: "按照设计图纸和技术要求制作钢筋笼，确保尺寸准确、焊接牢固",
         templateImages: [
           {
-            url: "/static/template/7.1钢筋笼生产（日常）/检查照片.png",
+            url: 检查照片_png,
             desc: "钢筋笼生产作业照片",
             type: "image",
           },
           {
-            url: "/static/template/7.1钢筋笼生产（日常）/施2020-24b 钢筋焊接连接接头工艺检验见证取样送检委托书.xls",
+            url: 施202024b_钢筋焊接连接接头工艺检验见证取样送检委托书_xls,
             desc: "《钢筋笼生产钢筋焊接连接接头工艺检验见证取样送检委托书》",
             type: "file",
           },
         ],
         additionalTemplates: [
           {
-            url: "/static/template/7.2钢筋笼生产（验收）/现场验收照片.jpg",
+            url: 现场验收照片_jpg_钢筋笼生产,
             desc: "钢筋笼生产监理验收照片",
             type: "image",
           },
@@ -127,12 +177,12 @@ function TaskList() {
         description: "向施工人员详细说明成桩的技术要求、质量标准和安全注意事项",
         templateImages: [
           {
-            url: "/static/template/2.2成桩技术交底/交底图片.png",
+            url: 交底图片_png,
             desc: "成桩技术交底照片",
             type: "image",
           },
           {
-            url: "/static/template/2.2成桩技术交底/人工挖孔桩技术交底.docx",
+            url: 人工挖孔桩技术交底_docx,
             desc: "《安全技术交底书》",
             type: "file",
           },
@@ -144,24 +194,24 @@ function TaskList() {
         description: "按照设计要求和技术规范进行桩基础的施工，确保成桩质量",
         templateImages: [
           {
-            url: "/static/template/3.1成桩（日常）/现场作业照片.png",
+            url: 现场作业照片_png,
             desc: "成桩作业照片",
             type: "image",
           },
           {
-            url: "/static/template/3.1成桩（日常）/施2020-76 现拌混凝土施工记录.xls",
+            url: 施202076_现拌混凝土施工记录_xls,
             desc: "现拌混凝土施工记录",
             type: "file",
           },
         ],
         additionalTemplates: [
           {
-            url: "/static/template/3.2成桩（验收）/现场验收照片.jpg",
+            url: 现场验收照片_jpg_成桩验收,
             desc: "成桩监理验收照片",
             type: "image",
           },
           {
-            url: "/static/template/3.2成桩（验收）/成桩桩长统计表.xlsx",
+            url: 成桩桩长统计表_xlsx,
             desc: "成桩桩长统计表",
             type: "file",
           },
@@ -173,39 +223,39 @@ function TaskList() {
         description: "将制作好的钢筋笼吊装入孔，并进行混凝土灌注，确保施工质量",
         templateImages: [
           {
-            url: "/static/template/8.1钢筋笼吊装、混凝土灌注（日常）/钢筋笼吊装照片.png",
+            url: 钢筋笼吊装照片_png,
             desc: "钢筋笼吊装作业照片",
             type: "image",
           },
           {
-            url: "/static/template/8.1钢筋笼吊装、混凝土灌注（日常）/混凝土灌注照片.png",
+            url: 混凝土灌注照片_png,
             desc: "钢筋笼吊装混凝土灌注照片",
             type: "image",
           },
           {
-            url: "/static/template/8.1钢筋笼吊装、混凝土灌注（日常）/施2020-78 混凝土开盘鉴定.xls",
+            url: 施202078_混凝土开盘鉴定_xls,
             desc: "钢筋笼吊装混凝土开盘鉴定",
             type: "file",
           },
           {
-            url: "/static/template/8.1钢筋笼吊装、混凝土灌注（日常）/施2020-75 预拌混凝土施工记录.xls",
+            url: 施202075_预拌混凝土施工记录_xls,
             desc: "钢筋笼吊装施工记录",
             type: "file",
           },
         ],
         additionalTemplates: [
           {
-            url: "/static/template/8.2钢筋笼吊装、混凝土灌注（验收）/浇筑完成后照片.png",
+            url: 浇筑完成后照片_png,
             desc: "钢筋笼吊装灌注完成照片",
             type: "image",
           },
           {
-            url: "/static/template/8.2钢筋笼吊装、混凝土灌注（验收）/施2020-77 混凝土浇灌令.xls",
+            url: 施202077_混凝土浇灌令_xls,
             desc: "《混凝土浇灌令》",
             type: "file",
           },
           {
-            url: "/static/template/8.2钢筋笼吊装、混凝土灌注（验收）/施2020-111 人工挖孔灌注桩单桩施工记录.xls",
+            url: 施2020111_人工挖孔灌注桩单桩施工记录_xls,
             desc: "《人工挖孔灌注桩单桩施工记录》",
             type: "file",
           },
@@ -311,13 +361,13 @@ function TaskList() {
       status: "pending",
       templateImages: [
         {
-          url: "/static/template/1.2桩点放样/施2020-61 工程测量控制点交桩记录表.xls",
+          url: 施202061_工程测量控制点交桩记录表_xls,
           desc: "工程测量控制点交桩记录表",
           type: "file",
           uploadedFiles: [],
         },
         {
-          url: "/static/template/1.2桩点放样/施工放样测量记录表.xlsx",
+          url: 施工放样测量记录表_xlsx,
           desc: "桩点位放样数据",
           type: "file",
           uploadedFiles: [],
@@ -846,8 +896,10 @@ function TaskList() {
       const link = document.createElement("a");
       // 设置链接地址
       link.href = fileUrl;
-      // 设置下载属性，文件名从URL中提取
-      const fileName = fileUrl.split("/").pop();
+      // 设置下载属性，文件名从导入的模块名或原始文件名中提取
+      const fileName = fileUrl.toString().includes("/")
+        ? fileUrl.split("/").pop()
+        : "template_file";
       link.download = fileName;
       // 添加到DOM
       document.body.appendChild(link);
@@ -1347,6 +1399,7 @@ function TaskList() {
       <Modal {...additionalTemplatesModalProps}>
         {showAdditionalTemplates && (
           <div className="additional-templates-modal">
+            {/* 额外模板模态框内容保持不变 */}
             {tasks.map((task) => {
               if (task.id === showAdditionalTemplates) {
                 return (
@@ -1366,11 +1419,8 @@ function TaskList() {
                             <div
                               className="image-thumbnail"
                               onClick={() => {
-                                if (image.type === "image") {
-                                  previewTemplate(image, task.id);
-                                } else {
-                                  downloadTemplateFile(image.url);
-                                }
+                                // 修改为统一使用previewTemplate函数，而不是直接下载
+                                previewTemplate(image, task.id);
                               }}
                             >
                               {image.type === "image" ? (
@@ -1379,13 +1429,13 @@ function TaskList() {
                                 <div className="file-placeholder">
                                   <span className="file-icon">📄</span>
                                   <span className="file-type">
-                                    {image.url.split("#").pop().toUpperCase()}
+                                    {image.url.split(".").pop().toUpperCase()}
                                   </span>
                                 </div>
                               )}
                             </div>
                           </div>
-
+                          
                           <div className="image-upload-area">
                             {/* 保留原有的上传区域代码 */}
                             <label className="upload-button">

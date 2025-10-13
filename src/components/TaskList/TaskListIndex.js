@@ -25,6 +25,12 @@ const TaskListIndex = () => {
   const [showAdditionalTemplates, setShowAdditionalTemplates] = useState(null);
   const [showFilePreviewModal, setShowFilePreviewModal] = useState(false);
   const [currentTemplateFile, setCurrentTemplateFile] = useState(null);
+  const [selectedTaskSuffix, setSelectedTaskSuffix] = useState(""); //后缀选择
+
+  // 实现getTaskSuffix函数
+  const getTaskSuffix = useCallback(() => {
+    return selectedTaskSuffix;
+  }, [selectedTaskSuffix]);
 
   // 获取当前任务
   const getCurrentTask = useCallback(() => {
@@ -86,6 +92,7 @@ const TaskListIndex = () => {
       });
     };
   }, [tasks]);
+
   // 处理添加任务
   const handleAddTask = useCallback(
     (e) => {
@@ -95,9 +102,14 @@ const TaskListIndex = () => {
           (task) => task.id === selectedTaskType
         );
         if (selectedTask) {
+          // 使用getTaskSuffix函数获取后缀
+          const suffix = getTaskSuffix();
+
           const task = {
             id: generateUUID(),
-            title: selectedTask.title,
+            title: suffix
+              ? `${selectedTask.title}-${suffix}`
+              : selectedTask.title,
             description: selectedTask.description,
             status: "pending",
             // 添加对templateImages的空值检查，如果不存在则提供默认空数组
@@ -121,11 +133,13 @@ const TaskListIndex = () => {
           };
           setTasks((prevTasks) => [...prevTasks, task]);
           setSelectedTaskType("");
+          // 重置后缀选择
+          setSelectedTaskSuffix("");
           setShowAddForm(false);
         }
       }
     },
-    [selectedTaskType]
+    [selectedTaskType, getTaskSuffix]
   );
 
   // 处理文件上传
@@ -252,6 +266,7 @@ const TaskListIndex = () => {
   );
 
   // 实现单任务提交功能
+  // 实现单任务提交功能
   const submitTaskFiles = useCallback(
     async (taskId) => {
       const task = tasks.find((t) => t.id === taskId);
@@ -272,8 +287,18 @@ const TaskListIndex = () => {
       let taskTypeCode = "";
       for (const [key, value] of Object.entries(TASK_CONFIG.taskTypeMapping)) {
         const taskType = TASK_CONFIG.fixedTasks.find((t) => t.id === key);
-        if (taskType && taskType.title === task.title) {
-          taskTypeCode = value;
+        if (
+          taskType &&
+          taskType.title === task.title.replace(/-(135|246)$/, "")
+        ) {
+          // 检查任务标题是否包含特定标识，用于判断是否需要添加后缀
+          if (task.title.includes("-135")) {
+            taskTypeCode = `${value}_135`;
+          } else if (task.title.includes("-246")) {
+            taskTypeCode = `${value}_246`;
+          } else {
+            taskTypeCode = value;
+          }
           break;
         }
       }
@@ -519,6 +544,20 @@ const TaskListIndex = () => {
               ))}
             </select>
           </div>
+
+          {/* 添加后缀选择器 */}
+          <div className="form-group">
+            <select
+              value={selectedTaskSuffix}
+              onChange={(e) => setSelectedTaskSuffix(e.target.value)}
+              className="form-control"
+            >
+              <option value="">任务阶段</option>
+              <option value="135">135</option>
+              <option value="246">246</option>
+            </select>
+          </div>
+
           <button type="submit" className="btn btn-primary">
             添加任务
           </button>

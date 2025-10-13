@@ -33,7 +33,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -44,8 +45,9 @@ html, body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   line-height: 1.5;
   background-color: var(--background-color);
   color: var(--text-primary);
@@ -281,17 +283,19 @@ body {
 }
 
 /* 响应式设计 */
-@media (max-width:768px) {
+@media (max-width: 768px) {
   .page-header h1 {
     font-size: 18px;
   }
-  
+
   .card {
     padding: var(--spacing-md);
   }
-  
+
+  /* 移除强制全宽，改为更灵活的方式 */
   .btn {
-    width: 100%;
+    padding: var(--spacing-xs) var(--spacing-sm); /* 减小内边距 */
+    font-size: 14px; /* 稍微减小字体 */
   }
 }
 

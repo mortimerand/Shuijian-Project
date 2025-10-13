@@ -15,7 +15,7 @@ function ProgressSummary() {
       setError(null);
 
       // API调用
-      const response = await fetch("api/daily_task/progress", {
+      const response = await fetch("/api/daily_task/progress", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

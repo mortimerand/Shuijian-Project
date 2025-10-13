@@ -60,27 +60,32 @@ const TaskListIndex = () => {
     return () => {
       // 清理所有blob URL
       tasks.forEach((task) => {
-        task.templateImages.forEach((img) => {
-          img.uploadedFiles.forEach((file) => {
-            if (file.url && file.url.startsWith("blob:")) {
-              URL.revokeObjectURL(file.url);
+        if (task.templateImages) {
+          task.templateImages.forEach((img) => {
+            if (img.uploadedFiles) {
+              img.uploadedFiles.forEach((file) => {
+                if (file.url && file.url.startsWith("blob:")) {
+                  URL.revokeObjectURL(file.url);
+                }
+              });
             }
           });
-        });
+        }
 
         if (task.additionalTemplateImages) {
           task.additionalTemplateImages.forEach((img) => {
-            img.uploadedFiles.forEach((file) => {
-              if (file.url && file.url.startsWith("blob:")) {
-                URL.revokeObjectURL(file.url);
-              }
-            });
+            if (img.uploadedFiles) {
+              img.uploadedFiles.forEach((file) => {
+                if (file.url && file.url.startsWith("blob:")) {
+                  URL.revokeObjectURL(file.url);
+                }
+              });
+            }
           });
         }
       });
     };
   }, [tasks]);
-
   // 处理添加任务
   const handleAddTask = useCallback(
     (e) => {

@@ -14,7 +14,7 @@ function DocumentManage() {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1>文档管理</h1>
+        <h1>资料管理</h1>
         <button onClick={() => navigate("/")} className="btn btn-secondary">
           返回主页
         </button>

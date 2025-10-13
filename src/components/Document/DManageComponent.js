@@ -1,119 +1,114 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Breadcrumb, Card, List, Button, message, Empty, Collapse } from "antd";
+import { DownloadOutlined, FileOutlined } from "@ant-design/icons";
+import axios from "axios";
 
-// 模板文件数据
-const templateFiles = [
-  {
-    id: 1,
-    name: "项目计划书模板.docx",
-    description: "用于创建标准化项目计划书的模板文件",
-    downloadUrl: "/templates/project-plan-template.docx",
-  },
-  {
-    id: 2,
-    name: "会议记录模板.xlsx",
-    description: "用于记录和跟踪会议内容的Excel模板",
-    downloadUrl: "/templates/meeting-minutes-template.xlsx",
-  },
-  {
-    id: 3,
-    name: "工作报告模板.pptx",
-    description: "用于制作工作报告的PowerPoint模板",
-    downloadUrl: "/templates/report-template.pptx",
-  },
-  {
-    id: 4,
-    name: "需求分析模板.docx",
-    description: "用于进行项目需求分析的文档模板",
-    downloadUrl: "/templates/requirement-analysis-template.docx",
-  },
-];
+const { Panel } = Collapse;
 
 export default function DManageComponent() {
+  // 状态管理
+  const [templateData, setTemplateData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 从API获取数据
+  useEffect(() => {
+    const fetchTemplateData = async () => {
+      try {
+        setLoading(true);
+        // 调用后端API
+        const response = await axios.get("/api/daily_task/templateResource");
+        setTemplateData(response.data);
+      } catch (error) {
+        message.error("获取模板数据失败，请稍后重试");
+        console.error("Failed to fetch template data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTemplateData();
+  }, []);
+
   // 处理文件下载
-  const handleDownload = (url) => {
-    // 在实际项目中，这里会是真实的文件下载逻辑    
-    // 这里我们模拟下载行为
-    console.log(`Downloading file from: ${url}`); 
-    // 创建一个临时的a标签来触发下载
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = url.split("/").pop();
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleDownload = (file) => {
+    try {
+      // 创建一个临时的a标签来触发下载
+      const link = document.createElement("a");
+      link.href = file.resourceUrl;
+      link.download = file.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      message.success(`开始下载: ${file.fileName}`);
+    } catch (error) {
+      message.error(`下载失败: ${file.fileName}`);
+      console.error("Failed to download file:", error);
+    }
   };
 
   return (
-    <>
-      <div className="card">
-        <h2 className="section-title">可下载模板</h2>
-        <div className="template-list">
-          {templateFiles.map((file) => (
-            <div
-              key={file.id}
-              className="template-item"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "16px",
-                borderBottom: "1px solid var(--border-light)",
-                marginBottom: "8px",
-              }}
-            >
-              <div className="template-info">
-                <h3
-                  style={{
-                    margin: "0 0 8px 0",
-                    fontSize: "16px",
-                    color: "var(--text-primary)",
-                  }}
-                >
-                  {file.name}
-                </h3>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "14px",
-                    color: "var(--text-secondary)",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {file.description}
-                </p>
-              </div>
-              <button
-                className="btn btn-primary"
-                onClick={() => handleDownload(file.downloadUrl)}
-              >
-                下载
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div style={{ padding: "20px" }}>
+      {/* 面包屑导航 */}
+      <Breadcrumb
+        items={[{ title: "模板文件", key: "root" }]}
+        style={{ marginBottom: "20px" }}
+      />
 
-      <div className="card">
-        <h2 className="section-title">使用说明</h2>
-        <ul
-          style={{
-            paddingLeft: "20px",
-            margin: "0",
-            color: "var(--text-secondary)",
-            fontSize: "14px",
-          }}
-        >
+      {/* 内容区域 - 使用折叠面板实现 */}
+      <Card loading={loading} title="模板文件">
+        {!loading &&
+          (templateData.length > 0 ? (
+            <Collapse defaultActiveKey={[]}>
+              {templateData.map((category, index) => (
+                <Panel
+                  header={`${category.taskNeedDateType} (共 ${category.taskNeedDate.length} 个文件)`}
+                  key={index}
+                  style={{ marginBottom: "8px" }}
+                >
+                  <List
+                    dataSource={category.taskNeedDate}
+                    renderItem={(file) => (
+                      <List.Item
+                        actions={[
+                          <Button
+                            type="primary"
+                            icon={<DownloadOutlined />}
+                            onClick={() => handleDownload(file)}
+                          >
+                            下载
+                          </Button>,
+                        ]}
+                      >
+                        <List.Item.Meta
+                          avatar={<FileOutlined style={{ fontSize: "24px" }} />}
+                          title={file.fileName}
+                          description={`文件路径: ${file.resourceUrl}`}
+                        />
+                      </List.Item>
+                    )}
+                  />
+                </Panel>
+              ))}
+            </Collapse>
+          ) : (
+            <Empty description="暂无模板数据" />
+          ))}
+      </Card>
+
+      {/* 使用说明 */}
+      <Card title="使用说明" style={{ marginTop: "20px" }}>
+        <ul style={{ paddingLeft: "20px", margin: 0 }}>
           <li style={{ marginBottom: "8px" }}>
-            点击"下载"按钮获取所需模板文件
+            点击折叠面板查看该分类下的所有模板文件
           </li>
           <li style={{ marginBottom: "8px" }}>
-            下载后可根据实际需求修改模板内容
+            点击"下载"按钮获取所需模板文件
           </li>
           <li style={{ marginBottom: "8px" }}>
             如有其他模板需求，请联系管理员
           </li>
         </ul>
-      </div>
-    </>
+      </Card>
+    </div>
   );
 }

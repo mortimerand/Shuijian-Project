@@ -57,7 +57,7 @@ const TASK_CONFIG = {
       id: "steel-cage-storage-check",
       title: "钢筋笼钢筋存储环境检查",
       description: "检查钢筋存储环境是否符合要求，防止钢筋锈蚀和损坏",
-      templateImages: [
+      additionalTemplates: [
         {
           url: "https://www.helloimg.com/i/2025/10/13/68ecbbcb17464.jpg",
           desc: "钢筋笼钢筋存储原材料存储照片",
@@ -75,6 +75,11 @@ const TASK_CONFIG = {
           url: "https://www.helloimg.com/i/2025/10/13/68ecbbdc95708.png",
           desc: "钢筋笼焊接技术交底照片",
           type: "image",
+        },
+        {
+          url: "",
+          desc: "《钢筋笼焊接安全技术交底书》",
+          type: "file",
         },
       ],
     },

@@ -77,45 +77,43 @@ export function getStatusClass(status) {
 export async function uploadFileToServer(taskData) {
   try {
     const formData = new FormData();
-
     // 添加任务类型
     formData.append("taskType", taskData.taskType);
-
     // 添加图片和对应的subtasks
     if (taskData.images && taskData.images.length > 0) {
       taskData.images.forEach((file, index) => {
+        // 使用相同的键名，FormData会自动处理多个文件
         formData.append(`images`, file);
       });
     }
-
     if (taskData.imagesSubtasks && taskData.imagesSubtasks.length > 0) {
       formData.append(
         "imagesSubtasks",
         JSON.stringify(taskData.imagesSubtasks)
       );
     }
-
-    // 添加文档和对应的subtasks
+    // 添加文档和对应的subtasks - 修复文件上传问题
     if (taskData.docs && taskData.docs.length > 0) {
-      taskData.docs.forEach((file) => {
+      taskData.docs.forEach((file, index) => {
+        // 使用相同的键名，确保与图片上传处理方式一致
         formData.append(`docs`, file);
+        // 添加额外的文件信息，帮助后端识别
+        formData.append(`docsName_${index}`, file.name);
+        formData.append(`docsType_${index}`, file.type);
+        formData.append(`docsSize_${index}`, file.size);
       });
     }
-
     if (taskData.docsSubtasks && taskData.docsSubtasks.length > 0) {
       formData.append("docsSubtasks", JSON.stringify(taskData.docsSubtasks));
     }
-
     // 发送请求到后端
     const response = await fetch("/api/daily_task/upload", {
       method: "POST",
       body: formData,
     });
-
     if (!response.ok) {
       throw new Error("上传失败");
     }
-
     const result = await response.json();
     return { success: true, result };
   } catch (error) {

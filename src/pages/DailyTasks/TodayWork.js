@@ -131,7 +131,10 @@ function TodayWork() {
                 {unNormalTasks.map((task, index) => (
                   <div key={index} className="card task-card-no-normal fade-in">
                     <div className="card-header">
-                      <h2 className="task-name-no-normal">{task.name}</h2>
+                      <h2 className="task-name-no-normal">
+                        {task.name}
+                        <span className="task-warning-tag">重要</span>
+                      </h2>
                     </div>
                     <div className="card-body">
                       <div className="subtasks-container">

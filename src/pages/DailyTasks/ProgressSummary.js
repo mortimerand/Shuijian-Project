@@ -31,9 +31,10 @@ function ProgressSummary() {
       const result = await response.json();
 
       // 根据summary.txt中的数据格式，检查返回的数据结构
+      // 修改 message 字段的检查条件，使其接受 "success"
       if (
         result.code === "200" &&
-        result.message === "成功" &&
+        (result.message === "成功" || result.message === "success") &&
         Array.isArray(result.data)
       ) {
         setData(result.data);
@@ -86,14 +87,17 @@ function ProgressSummary() {
       dataIndex: "taskStatus",
       key: "taskStatus",
       // 根据任务状态设置不同的样式
+      // 扩展任务状态的渲染逻辑，添加对 "进度落后" 和 "未开始" 的支持
       render: (status) => {
         let color = "";
         if (status === "进行中") {
           color = "#1890ff";
         } else if (status === "已完成") {
           color = "#52c41a";
-        } else if (status === "已逾期") {
+        } else if (status === "已逾期" || status === "进度落后") {
           color = "#f5222d";
+        } else if (status === "未开始") {
+          color = "#d9d9d9";
         }
         return <span style={{ color }}>{status}</span>;
       },
@@ -101,6 +105,8 @@ function ProgressSummary() {
         { text: "进行中", value: "进行中" },
         { text: "已完成", value: "已完成" },
         { text: "已逾期", value: "已逾期" },
+        { text: "进度落后", value: "进度落后" },
+        { text: "未开始", value: "未开始" },
       ],
       onFilter: (value, record) => record.taskStatus === value,
     },

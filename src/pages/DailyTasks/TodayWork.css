@@ -1,121 +1,17 @@
-.page-todaywork {
-  min-height: 100vh;
-  background-color: var(--background-color);
-  display: flex;
-  flex-direction: column;
-  padding-left: 0%;
-}
-
-
-/* TodayWork 页面特有样式 */
-.tasks-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px 0;
-  width: 100%;
-}
-
-.task-card {
-  border-radius: 12px;
-  overflow: hidden;
-  background: linear-gradient(145deg, #ffffff, #f8f9fa);
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.task-card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
-}
-
-.task-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(to bottom, var(--primary-color), #64b5f6);
-}
-
-.task-name {
-  color: var(--text-primary);
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.subtasks-container {
-  padding: 10px 0;
-}
-
-.subtask-card {
-  padding: 16px 20px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  background-color: #fafafa;
-  transition: all 0.3s ease;
-  position: relative;
-  border-left: 3px solid transparent;
-  line-height: 1.8; /* 增加子任务卡片内的整体行高 */
-}
-
-.subtask-card:hover {
-  background-color: #f5f5f5;
-  border-left-color: var(--primary-color);
-  transform: translateX(4px);
-}
-
-.subtask-header {
-  margin-bottom: 12px; /* 增加标题区域与描述之间的间距 */
-}
-
-.subtask-header h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  line-height: 1.4;
-}
-
-.subtask-order {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  min-width: 40px;
-  text-align: center;
-}
-
-.subtask-description {
-  color: var(--text-secondary);
-  font-size: 14px;
-  line-height: 1.6;
-  margin-top: 8px;
-  padding-left: 25px !important;
-}
-
-/* noNormal 任务卡片样式 */
+/* noNormal 任务卡片样式优化 */
 .task-card-no-normal {
   border-radius: 12px;
   overflow: hidden;
   background: linear-gradient(145deg, #fff8f8, #fff0f0);
   transition: all 0.3s ease;
   position: relative;
+  border: 1px solid var(--error-color);
+  /* 增强阴影效果 */
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.1);
 }
 
 .task-card-no-normal:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(231, 76, 60, 0.15);
   transform: translateY(-2px);
 }
 
@@ -126,7 +22,17 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(to bottom, var(--danger-color), #ff8a80);
+  background: linear-gradient(to bottom, var(--error-color), #ff8a80);
+}
+
+/* 添加警告图标 */
+.task-card-no-normal::after {
+  content: '⚠️';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 16px;
+  animation: pulse 2s ease-in-out infinite;
 }
 
 .task-name-no-normal {
@@ -134,8 +40,22 @@
   font-size: 18px;
   font-weight: 600;
   margin: 0;
-  padding: 16px 20px;
+  padding: 16px 40px 16px 20px; /* 为右侧警告图标留出空间 */
   border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 为非普通任务添加警告标签 */
+.task-warning-tag {
+  background-color: var(--error-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: auto;
 }
 
 .subtask-card-no-normal {
@@ -147,16 +67,20 @@
   position: relative;
   border-left: 3px solid transparent;
   line-height: 1.8;
+  /* 添加轻微边框 */
+  border: 1px solid rgba(231, 76, 60, 0.1);
 }
 
 .subtask-card-no-normal:hover {
   background-color: #ffebee;
-  border-left-color: var(--danger-color);
+  border-left-color: var(--error-color);
   transform: translateX(4px);
+  /* 增强悬浮时的阴影 */
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.1);
 }
 
 .subtask-order-no-normal {
-  background-color: var(--danger-color);
+  background-color: var(--error-color);
   color: white;
   padding: 2px 8px;
   border-radius: 12px;
@@ -166,108 +90,24 @@
   text-align: center;
 }
 
-.no-subtasks {
-  text-align: center;
-  color: var(--text-tertiary);
-  padding: 40px;
-  font-style: italic;
-}
-
-/* 加载状态样式优化 */
-.card-loading {
-  text-align: center;
-  padding: 40px;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-.loading-text {
-  color: var(--text-secondary);
-  font-size: 16px;
-}
-
-/* 错误状态样式优化 */
-.card-error {
-  border-color: var(--danger-color);
-  box-shadow: 0 0 0 1px rgba(244, 67, 54, 0.1);
-}
-
-/* 空状态样式优化 */
-.card-empty {
-  text-align: center;
-  padding: 60px 20px;
-  background-color: #f8f9fa;
-  border: 2px dashed var(--border-color);
-}
-
-.empty-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-}
-
-.empty-text {
-  color: var(--text-secondary);
-  font-size: 16px;
-  font-weight: 500;
-}
-
-/* 动画效果 */
-.fade-in {
-  animation: fadeIn 0.5s ease-out;
-}
-
-.slide-in {
-  animation: slideIn 0.4s ease-out;
-}
-
-
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* 响应式设计 */
+/* 响应式设计优化 */
 @media (max-width: 768px) {
-  .tasks-container {
-    padding: 10px;
-  }
-  
-  .task-card {
+  .task-card-no-normal {
     border-radius: 8px;
   }
   
-  .task-name {
+  .task-name-no-normal {
     font-size: 16px;
-    padding: 12px 16px;
+    padding: 12px 36px 12px 16px; /* 移动端调整 */
   }
   
-  .subtask-card {
+  .task-card-no-normal::after {
+    font-size: 14px;
+    top: 10px;
+    right: 12px;
+  }
+  
+  .subtask-card-no-normal {
     padding: 12px 16px;
   }
   
@@ -278,5 +118,17 @@
   .subtask-description {
     font-size: 13px;
     padding-left: 0;
+  }
+}
+
+/* 动画效果增强 */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
   }
 }

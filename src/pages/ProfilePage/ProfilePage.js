@@ -1,16 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ProfilePage.css';
 
 function ProfilePage() {
-  // 定义文件统计数据
-  const fileStats = [
-    { name: '施工图片总张数', count: 125 },
-    { name: '竣工图片总张数', count: 86 },
-    { name: '施工日志总条数', count: 32 },
-    { name: '技术文件总条数', count: 18 },
-    { name: '竣工文件总条数', count: 24 }
-  ];
+  // 使用state管理统计数据
+  const [fileStats, setFileStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // 获取统计数据的函数
+    const fetchStatistics = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        // 调用API接口
+        const response = await fetch('/api/daily_task/statistics');
+        const data = await response.json();
+        
+        // 检查响应状态
+        if (data.code === '200') {
+          // 映射后端数据到前端需要的格式
+          const statsData = [
+            { name: '施工图片总张数', count: data.data.dailyTaskImages },
+            { name: '竣工图片总张数', count: data.data.checkTaskImages },
+            { name: '施工日志总条数', count: data.data.dailyTaskLog },
+            { name: '技术文件总条数', count: data.data.dailyTaskDocs },
+            { name: '竣工文件总条数', count: data.data.checkTaskDocs }
+          ];
+          setFileStats(statsData);
+        } else {
+          throw new Error(data.message || '获取数据失败');
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // 调用函数
+    fetchStatistics();
+  }, []);
 
   return (
     <div className="page-container">
@@ -23,7 +54,7 @@ function ProfilePage() {
           {/* 头像部分 */}
           <div className="avatar-section">
             <div className="avatar">
-              <img src="https://via.placeholder.com/150" alt="用户头像" loading="lazy" />
+              <img src="https://unsplash.com/photos/abstract-swirling-pastel-colors-with-iridescent-sheen-jL2Fn6vWn0M" alt="用户头像" loading="lazy" />
             </div>
           </div>
           
@@ -50,7 +81,9 @@ function ProfilePage() {
           <div className="work-stats">
             <h2>工作量统计</h2>
             <div className="stats-table">
-              {fileStats.map((item, index) => (
+              {loading && <div className="loading">加载中...</div>}
+              {error && <div className="error">{error}</div>}
+              {!loading && !error && fileStats.map((item, index) => (
                 <div key={index} className="stats-row">
                   <div className="stats-cell">{item.name}</div>
                   <div className="stats-cell stats-count">{item.count}</div>

@@ -54,7 +54,7 @@ function ProfilePage() {
           {/* 头像部分 */}
           <div className="avatar-section">
             <div className="avatar">
-              <img src="https://unsplash.com/photos/abstract-swirling-pastel-colors-with-iridescent-sheen-jL2Fn6vWn0M" alt="用户头像" loading="lazy" />
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="用户头像" loading="lazy" />
             </div>
           </div>
           
@@ -68,7 +68,7 @@ function ProfilePage() {
               </div>
               <div className="info-row">
                 <div className="info-label">岗位</div>
-                <div className="info-value">前端开发工程师</div>
+                <div className="info-value">项目管理人员</div>
               </div>
               <div className="info-row">
                 <div className="info-label">联系方式</div>

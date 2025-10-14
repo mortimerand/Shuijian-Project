@@ -27,10 +27,10 @@ const TaskListIndex = () => {
   const [currentTemplateFile, setCurrentTemplateFile] = useState(null);
   const [selectedTaskSuffix, setSelectedTaskSuffix] = useState(""); //后缀选择
 
-  // 实现getTaskSuffix函数
-  const getTaskSuffix = useCallback(() => {
-    return selectedTaskSuffix;
-  }, [selectedTaskSuffix]);
+  // // 实现getTaskSuffix函数
+  // const getTaskSuffix = useCallback(() => {
+  //   return selectedTaskSuffix;
+  // }, [selectedTaskSuffix]);
 
   // 获取当前任务
   const getCurrentTask = useCallback(() => {
@@ -93,7 +93,7 @@ const TaskListIndex = () => {
     };
   }, [tasks]);
 
-  // 处理添加任务
+  /// 处理添加任务
   const handleAddTask = useCallback(
     (e) => {
       e.preventDefault();
@@ -102,14 +102,9 @@ const TaskListIndex = () => {
           (task) => task.id === selectedTaskType
         );
         if (selectedTask) {
-          // 使用getTaskSuffix函数获取后缀
-          const suffix = getTaskSuffix();
-
           const task = {
             id: generateUUID(),
-            title: suffix
-              ? `${selectedTask.title}-${suffix}`
-              : selectedTask.title,
+            title: selectedTask.title,
             description: selectedTask.description,
             status: "pending",
             // 添加对templateImages的空值检查，如果不存在则提供默认空数组
@@ -133,13 +128,11 @@ const TaskListIndex = () => {
           };
           setTasks((prevTasks) => [...prevTasks, task]);
           setSelectedTaskType("");
-          // 重置后缀选择
-          setSelectedTaskSuffix("");
           setShowAddForm(false);
         }
       }
     },
-    [selectedTaskType, getTaskSuffix]
+    [selectedTaskType]
   );
 
   // 处理文件上传
@@ -542,19 +535,6 @@ const TaskListIndex = () => {
                   {task.title}
                 </option>
               ))}
-            </select>
-          </div>
-
-          {/* 添加后缀选择器 */}
-          <div className="form-group">
-            <select
-              value={selectedTaskSuffix}
-              onChange={(e) => setSelectedTaskSuffix(e.target.value)}
-              className="form-control"
-            >
-              <option value="">任务阶段</option>
-              <option value="135">135</option>
-              <option value="246">246</option>
             </select>
           </div>
 

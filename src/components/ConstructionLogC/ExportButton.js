@@ -5,7 +5,7 @@ export function getFilenameFromDisposition(disposition) {
   if (!disposition) return 'download.xls';
   const star = /filename\*\s*=\s*([^']*)''([^;]+)/i.exec(disposition);
   if (star && star[2]) {
-    try { return decodeURIComponent(star[2]); } catch {}
+    try { return decodeURIComponent(star[2]); } catch {} 
   }
   const normal = /filename\s*=\s*('|")?([^;'"\s]+)\1/i.exec(disposition);
   if (normal && normal[2]) return normal[2];
@@ -50,18 +50,34 @@ export default function ExportButton({ logData, onExportStart, onExportEnd }) {
       const filename = getFilenameFromDisposition(disposition);
       const ct = resp.headers.get('Content-Type') || 'application/vnd.ms-excel';
 
+      // 改进的下载逻辑
       const blob = await resp.blob();
-      const file = new File([blob], filename, { type: ct });
-      const url = URL.createObjectURL(file);
+      
+      // 检查blob是否为空
+      if (blob.size === 0) {
+        throw new Error('下载的文件为空');
+      }
+      
+      // 创建下载链接
+      const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
+      
+      // 确保在用户交互上下文中触发下载
       document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      
+      // 使用setTimeout确保在下一个事件循环中执行，提高兼容性
+      setTimeout(() => {
+        a.click();
+        // 延迟移除a标签和释放URL，确保下载过程完成
+        setTimeout(() => {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 100);
+      }, 0);
     } catch (e) {
-      console.error(e);
+      console.error('导出失败:', e);
       alert(e.message);
     } finally {
       setLoading(false);

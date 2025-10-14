@@ -16,7 +16,7 @@ export default function DManageComponent() {
       try {
         setLoading(true);
         // 调用后端API
-        const response = await axios.get("/api/daily_task/templateResource");
+        const response = await axios.get("/api/daily_task/download");
         
         // 关键修复：确保templateData始终是一个数组
         if (Array.isArray(response.data)) {

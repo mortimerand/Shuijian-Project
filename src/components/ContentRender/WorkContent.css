@@ -1,0 +1,363 @@
+/* 引入公共变量和基础样式 */
+@import "../../pages/common.css";
+
+/* 任务容器 */
+.tasks-container {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 基础卡片样式 */
+.card {
+  background-color: white;
+  border-radius: var(--radius-small);
+  box-shadow: var(--shadow-light);
+  border: 1px solid var(--border-light);
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+  width: 100%;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 加载状态卡片 */
+.card-loading {
+  padding: var(--spacing-lg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-text {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* 错误状态卡片 */
+.card-error {
+  padding: var(--spacing-lg);
+}
+
+/* 空状态卡片 */
+.card-empty {
+  padding: var(--spacing-xl);
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.empty-text {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin: 0;
+}
+
+/* 普通任务卡片 */
+.task-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.task-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.task-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary-color), #90caf9);
+}
+
+.task-name {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* 非正常任务卡片样式优化 */
+.task-card-un-normal {
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #fff8f8, #fff0f0);
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid var(--error-color);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.1);
+}
+
+.task-card-un-normal:hover {
+  box-shadow: 0 8px 24px rgba(231, 76, 60, 0.15);
+  transform: translateY(-2px);
+}
+
+.task-card-un-normal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--error-color), #ff8a80);
+}
+
+/* 添加警告图标 */
+.task-card-un-normal::after {
+  content: '⚠️';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 16px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.task-name-un-normal {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  padding: 16px 40px 16px 20px; /* 为右侧警告图标留出空间 */
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 为非普通任务添加警告标签 */
+.task-warning-tag {
+  background-color: var(--error-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* 子任务容器 */
+.subtasks-container {
+  padding: 16px;
+}
+
+/* 普通子任务卡片 */
+.subtask-card {
+  padding: 16px 20px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+  position: relative;
+  border-left: 3px solid transparent;
+  line-height: 1.8;
+  border: 1px solid var(--border-light);
+}
+
+.subtask-card:hover {
+  background-color: #f5f5f5;
+  border-left-color: var(--primary-color);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 非正常子任务卡片 */
+.subtask-card-un-normal {
+  padding: 16px 20px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background-color: #fff5f5;
+  transition: all 0.3s ease;
+  position: relative;
+  border-left: 3px solid transparent;
+  line-height: 1.8;
+  border: 1px solid rgba(231, 76, 60, 0.1);
+}
+
+.subtask-card-un-normal:hover {
+  background-color: #ffebee;
+  border-left-color: var(--error-color);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.1);
+}
+
+.subtask-header {
+  margin-bottom: 8px;
+}
+
+.subtask-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 普通子任务序号 */
+.subtask-order {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* 非正常子任务序号 */
+.subtask-order-un-normal {
+  background-color: var(--error-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
+}
+
+.subtask-description {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  padding-left: 50px;
+}
+
+.no-subtasks {
+  color: var(--text-tertiary);
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+}
+
+/* 动画效果 */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* 按钮通用样式 */
+.btn {
+  border: none;
+  border-radius: var(--radius-small);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(26, 115, 232, 0.2);
+}
+
+/* 响应式设计优化 */
+@media (max-width: 768px) {
+  .task-card,
+  .task-card-un-normal {
+    border-radius: 8px;
+  }
+  
+  .task-name,
+  .task-name-un-normal {
+    font-size: 16px;
+    padding: 12px 36px 12px 16px;
+  }
+  
+  .task-card-un-normal::after {
+    font-size: 14px;
+    top: 10px;
+    right: 12px;
+  }
+  
+  .subtask-card,
+  .subtask-card-un-normal {
+    padding: 12px 16px;
+  }
+  
+  .subtask-header h3 {
+    font-size: 14px;
+  }
+  
+  .subtask-description {
+    font-size: 13px;
+    padding-left: 0;
+  }
+  
+  .card-loading,
+  .card-error,
+  .card-empty {
+    padding: var(--spacing-md);
+  }
+  
+  .empty-icon {
+    font-size: 36px;
+  }
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Spin, Alert } from "antd";
+import WorkContent from "../../components/ContentRender/WorkContent";
 import "./DailyTasks.css";
 
 function ProgressSummary() {
@@ -7,8 +8,14 @@ function ProgressSummary() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // 明日任务状态管理
+  const [tomorrowTasks, setTomorrowTasks] = useState({});
+  const [tomorrowLoading, setTomorrowLoading] = useState(true);
+  const [tomorrowError, setTomorrowError] = useState(null);
+  const [tomorrowNoTaskMessage, setTomorrowNoTaskMessage] = useState("");
 
-  // 从后端获取数据
+  // 从后端获取进度数据
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -69,10 +76,52 @@ function ProgressSummary() {
       setLoading(false);
     }
   };
+  
+  // 从后端获取明日任务数据
+  const fetchTomorrowTasks = async () => {
+    try {
+      setTomorrowLoading(true);
+      setTomorrowError(null);
+      setTomorrowNoTaskMessage("");
+
+      const response = await fetch("/api/daily_task/next_day_info");
+      if (!response.ok) {
+        throw new Error(`请求失败: ${response.status}`);
+      }
+
+      const data = await response.json();
+      // 检查返回的状态码
+      if (data.code === "200" && data.data) {
+        // 有任务时的数据处理
+        // 确保 normal 始终是数组格式
+        const normals = data.data.normal || [];
+
+        // 处理单个对象的情况
+        setTomorrowTasks({
+          normal: Array.isArray(normals) ? normals : [normals],
+          unNormal: [] // 接口说明只有normal数据
+        });
+      } else if (data.code === "400" && data.message === "false") {
+        // 无任务时的数据处理
+        setTomorrowTasks({ normal: [], unNormal: [] });
+        setTomorrowNoTaskMessage(
+          typeof data.data === "string" ? data.data : "明日暂无任务安排"
+        );
+      } else {
+        throw new Error(`数据格式不正确: ${JSON.stringify(data)}`);
+      }
+    } catch (err) {
+      setTomorrowError(err.message);
+      setTomorrowTasks({ normal: [], unNormal: [] });
+    } finally {
+      setTomorrowLoading(false);
+    }
+  };
 
   // 组件挂载时获取数据
   useEffect(() => {
     fetchData();
+    fetchTomorrowTasks(); // 同时获取明日任务数据
   }, []);
 
   // 定义表格列配置
@@ -130,7 +179,10 @@ function ProgressSummary() {
       <h2>任务进度汇总</h2>
       <button
         className="btn btn-primary refresh-button"
-        onClick={fetchData}
+        onClick={() => {
+          fetchData();
+          fetchTomorrowTasks();
+        }}
         disabled={loading}
       >
         {loading ? "刷新中..." : "刷新数据"}
@@ -166,6 +218,18 @@ function ProgressSummary() {
           }}
         />
       )}
+      
+      {/* 明日任务部分 */}
+      <div className="tomorrow-tasks-section" style={{ marginTop: '40px' }}>
+        <h2>明日任务安排</h2>
+        <WorkContent
+          normalTasks={tomorrowTasks.normal || []}
+          unNormalTasks={tomorrowTasks.unNormal || []}
+          noTaskMessage={tomorrowNoTaskMessage}
+          loading={tomorrowLoading}
+          error={tomorrowError}
+        />
+      </div>
     </div>
   );
 }

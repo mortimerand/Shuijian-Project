@@ -15,8 +15,12 @@ export default function DManageComponent({ resourceUrl }) {
     const fetchTemplateData = async () => {
       try {
         setLoading(true);
-        // 调用后端API
-        const response = await axios.get("/api/daily_task/download");
+        // 调用后端API - 添加resourceUrl参数
+        const response = await axios.get("/api/daily_task/download", {
+          params: {
+            resourceUrl: resourceUrl,
+          },
+        });
 
         // 确保数据格式正确
         if (Array.isArray(response.data)) {

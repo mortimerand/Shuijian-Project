@@ -495,7 +495,7 @@ function ConstructionLogC() {
         <ol style={{ margin: "10px 0 0 20px" }}>
           <li style={{ marginBottom: "5px" }}>下载生成的日志文件</li>
           <li style={{ marginBottom: "5px" }}>打印日志文件并进行线下签字</li>
-          <li style={{ marginBottom: "5px" }}>签字完成后请妥善保管纸质文档</li>
+          <li style={{ marginBottom: "5px" }}>签字完成后请在每日任务中上传签字后的照片</li>
         </ol>
         <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
           <ExportButton

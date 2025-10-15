@@ -13,7 +13,6 @@ import { TASK_CONFIG } from "./TaskConfig";
 import "./TaskList.css";
 
 const TaskListIndex = () => {
-  // 模拟任务数据
   const [tasks, setTasks] = useState([]);
 
   // 其他状态
@@ -37,6 +36,44 @@ const TaskListIndex = () => {
     if (!currentTaskId) return null;
     return tasks.find((task) => task.id === currentTaskId) || null;
   }, [tasks, currentTaskId]);
+  
+  // 默认添加施工日志任务
+   useEffect(() => {
+    // 查找'施工日志'任务配置
+    const constructionLogTask = TASK_CONFIG.fixedTasks.find(
+      (task) => task.id === 'construction-log'
+    );
+    
+    if (constructionLogTask) {
+      // 创建默认任务对象
+      const defaultTask = {
+        id: generateUUID(),
+        title: constructionLogTask.title,
+        description: constructionLogTask.description,
+        status: "pending",
+        // 添加对templateImages的空值检查，如果不存在则提供默认空数组
+        templateImages: constructionLogTask.templateImages
+          ? constructionLogTask.templateImages.map((img) => ({
+              url: img.url,
+              desc: img.desc,
+              type: img.type,
+              uploadedFiles: [],
+            }))
+          : [],
+        // 确保新任务包含额外模板信息
+        additionalTemplateImages: constructionLogTask.additionalTemplates
+          ? constructionLogTask.additionalTemplates.map((img) => ({
+              url: img.url,
+              desc: img.desc,
+              type: img.type,
+              uploadedFiles: [],
+            }))
+          : [],
+      };
+      
+      setTasks([defaultTask]);
+    }
+  }, []);
 
   // 自动检查任务状态
   useEffect(() => {
@@ -258,7 +295,6 @@ const TaskListIndex = () => {
     [tasks]
   );
 
-  // 实现单任务提交功能
   // 实现单任务提交功能
   const submitTaskFiles = useCallback(
     async (taskId) => {

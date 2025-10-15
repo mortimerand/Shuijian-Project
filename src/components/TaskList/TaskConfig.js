@@ -295,6 +295,18 @@ const TASK_CONFIG = {
         },
       ],
     },
+    {
+      id: "construction-log",
+      title: "施工日志",
+      description: "填写施工日志，上传打印签字后的施工日志照片",
+      templateImages: [
+        {
+          url: "",
+          desc: "施工日志",
+          type: "image",
+        },
+      ],
+    },
   ],
 
   // 任务类型与后端编码的映射关系
@@ -313,6 +325,7 @@ const TASK_CONFIG = {
     "steel-cage-lifting": "GANGJINLONG_DIAOZHUANG",
     "steel-cage-lifting-135": "GANGJINLONG_DIAOZHUANG_135",
     "steel-cage-lifting-246": "GANGJINLONG_DIAOZHUANG_246",
+    "construction-log": "SHIGONGRIZHI",
   },
 
   // 任务数据编码映射关系
@@ -370,6 +383,9 @@ const TASK_CONFIG = {
       钢筋笼吊装混凝土浇灌令: "GANGJINLONG_DIAOZHUANG_JIAOGUANLING",
       钢筋笼吊装人工挖孔灌注桩单桩施工记录:
         "GANGJINLONG_DIAOZHUANG_GUANZHU_CHENGZHUANG_JILU",
+    },
+    SHIGONGRIZHI: {
+      施工日志: "SHIGONGRIZHI",
     },
     // 添加带后缀的任务类型映射，复用基础映射
     GANGJINLONG_SHENGCHAN_135: {

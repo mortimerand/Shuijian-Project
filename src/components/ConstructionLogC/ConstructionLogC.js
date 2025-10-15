@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import ExportButton from "./ExportButton";
-
+import ExportButton, { getFilenameFromDisposition } from "./ExportButton";
 function ConstructionLogC() {
   // 根据后端参数模板定义日志字段
   const [newLog, setNewLog] = useState({
@@ -34,6 +33,7 @@ function ConstructionLogC() {
   const [submittedLog, setSubmittedLog] = useState(null); // 存储已提交的日志数据
 
   // 提交日志到后端
+  // 提交日志到后端
   const handleSubmitLog = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -53,18 +53,51 @@ function ConstructionLogC() {
         throw new Error(`提交失败 ${response.status}: ${text || "未知错误"}`);
       }
 
-      // 直接处理文件响应，不再尝试解析JSON
       // 保存已提交的日志数据
       setSubmittedLog({ ...newLog });
-      alert("施工日志提交成功！");
-      // 显示线下签字提示
-      setShowOfflineSigning(true);
+
+      // === 添加文件下载逻辑 ===
+      // 从响应头获取文件名
+      const disposition = response.headers.get("Content-Disposition") || "";
+      const filename = getFilenameFromDisposition(disposition);
+
+      // 获取文件内容并下载
+      const blob = await response.blob();
+
+      // 检查blob是否为空
+      if (blob.size === 0) {
+        throw new Error("下载的文件为空");
+      }
+
+      // 创建下载链接
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+
+      // 确保在用户交互上下文中触发下载
+      document.body.appendChild(a);
+
+      // 使用setTimeout确保在下一个事件循环中执行，提高兼容性
+      setTimeout(() => {
+        a.click();
+        // 延迟移除a标签和释放URL，确保下载过程完成
+        setTimeout(() => {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+
+          // 下载完成后显示提示
+          alert("施工日志提交成功并已开始下载！");
+          setShowOfflineSigning(true);
+        }, 100);
+      }, 0);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+  
   // 重置表单
   const resetForm = () => {
     setNewLog({

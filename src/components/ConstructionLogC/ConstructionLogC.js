@@ -547,8 +547,8 @@ function ConstructionLogC() {
       {/* 线下签字提示 - 仅在提交日志后显示 */}
       {showOfflineSigning && !showAddForm && renderOfflineSigning()}
 
-      {/* 日志列表 - 可以从后端获取数据并显示 */}
-      <div className="logs-list">{renderLogsList()}</div>
+      {/* 日志列表 - 可以从后端获取数据并显示
+      <div className="logs-list">{renderLogsList()}</div> */}
     </>
   );
 }

@@ -87,8 +87,6 @@ export default function DManageComponent({ resourceUrl }) {
       const response = await axios.get("/api/daily_task/download", {
         params: {
           resourceUrl: resourceUrl,
-          fileName: file.fileName,
-          fileUrl: file.resourceUrl,
         },
         responseType: "blob",
       });

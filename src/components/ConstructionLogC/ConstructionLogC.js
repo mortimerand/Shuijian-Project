@@ -49,26 +49,22 @@ function ConstructionLogC() {
       });
 
       if (!response.ok) {
-        throw new Error("提交失败，请重试");
+        const text = await response.text();
+        throw new Error(`提交失败 ${response.status}: ${text || "未知错误"}`);
       }
 
-      const result = await response.json();
-      if (result.success) {
-        // 保存已提交的日志数据
-        setSubmittedLog({ ...newLog });
-        alert("施工日志提交成功！");
-        // 显示线下签字提示
-        setShowOfflineSigning(true);
-      } else {
-        throw new Error(result.message || "提交失败");
-      }
+      // 直接处理文件响应，不再尝试解析JSON
+      // 保存已提交的日志数据
+      setSubmittedLog({ ...newLog });
+      alert("施工日志提交成功！");
+      // 显示线下签字提示
+      setShowOfflineSigning(true);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
-
   // 重置表单
   const resetForm = () => {
     setNewLog({
@@ -495,7 +491,9 @@ function ConstructionLogC() {
         <ol style={{ margin: "10px 0 0 20px" }}>
           <li style={{ marginBottom: "5px" }}>下载生成的日志文件</li>
           <li style={{ marginBottom: "5px" }}>打印日志文件并进行线下签字</li>
-          <li style={{ marginBottom: "5px" }}>签字完成后请在每日任务中上传签字后的照片</li>
+          <li style={{ marginBottom: "5px" }}>
+            签字完成后请在每日任务中上传签字后的照片
+          </li>
         </ol>
         <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
           <ExportButton

@@ -25,7 +25,8 @@ const TASK_CONFIG = {
       description: "验收进场钢筋的质量、规格和数量，确保符合设计和规范要求",
       templateImages: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbcd8ad822.png",
+          //hello图床 url: "https://www.helloimg.com/i/2025/10/13/68ecbcd8ad822.png",
+          url:"../../../public/数据库模板文库/5.1钢筋笼钢筋进场（日常）/质量证明书.png",
           desc: "《出场质量证明书》",
           type: "image",
         },

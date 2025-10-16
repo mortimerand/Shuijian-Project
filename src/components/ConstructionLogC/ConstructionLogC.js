@@ -57,9 +57,8 @@ function ConstructionLogC() {
       setSubmittedLog({ ...newLog });
 
       // === 添加文件下载逻辑 ===
-      // 从响应头获取文件名
-      const disposition = response.headers.get("Content-Disposition") || "";
-      const filename = getFilenameFromDisposition(disposition);
+      // 文件名格式：yyyy-MM-dd_施工日志.xls
+      const filename = `${newLog.date}_施工日志.xls`;
 
       // 获取文件内容并下载
       const blob = await response.blob();

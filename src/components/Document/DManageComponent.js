@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Breadcrumb, Card, List, Button, message, Empty, Collapse } from "antd";
 import { DownloadOutlined, FileOutlined } from "@ant-design/icons";
 import axios from "axios";
+import DocumentData from "./DocumentData.json";
 
 const { Panel } = Collapse;
 
@@ -10,22 +11,15 @@ export default function DManageComponent({ resourceUrl }) {
   const [templateData, setTemplateData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 从API获取数据
+  // 使用本地数据初始化
   useEffect(() => {
-    const fetchTemplateData = async () => {
+    const initializeData = () => {
       try {
         setLoading(true);
-        // 调用后端API - 添加resourceUrl参数
-        const response = await axios.get("/api/daily_task/download", {
-          params: {
-            resourceUrl: resourceUrl,
-          },
-        });
-
         // 确保数据格式正确
-        if (Array.isArray(response.data)) {
-          // 验证数据结构是否符合downExample.json的格式
-          const validData = response.data.filter(
+        if (Array.isArray(DocumentData)) {
+          // 验证数据结构
+          const validData = DocumentData.filter(
             (item) =>
               item &&
               typeof item.taskNeedDateType === "string" &&
@@ -33,52 +27,23 @@ export default function DManageComponent({ resourceUrl }) {
           );
           setTemplateData(validData);
         } else {
-          console.error("API返回的数据不是数组格式", response.data);
-          message.error("数据格式错误，请稍后重试");
+          console.error("DocumentData不是数组格式", DocumentData);
+          message.error("数据格式错误");
           setTemplateData([]);
         }
       } catch (error) {
-        message.error("获取模板数据失败，请稍后重试");
-        console.error("Failed to fetch template data:", error);
-
-        // 添加模拟数据作为备用，确保组件能够正常显示
-        const mockData = [
-          {
-            taskNeedDateType: "桩点放样",
-            taskNeedDate: [
-              {
-                fileName: "施工放样测量记录表",
-                resourceUrl:
-                  "static/data/文件模板/桩点放样/施工放样测量记录表.xlsx",
-              },
-              {
-                fileName: "施2020-61 工程测量控制点交桩记录表",
-                resourceUrl:
-                  "static/data/文件模板/桩点放样/施2020-61 工程测量控制点交桩记录表.xls",
-              },
-            ],
-          },
-          {
-            taskNeedDateType: "成桩技术交底",
-            taskNeedDate: [
-              {
-                fileName: "人工挖孔桩技术交底",
-                resourceUrl:
-                  "static/data/文件模板/成桩技术交底/人工挖孔桩技术交底.docx",
-              },
-            ],
-          },
-        ];
-        setTemplateData(mockData);
+        message.error("初始化数据失败");
+        console.error("Failed to initialize data:", error);
+        setTemplateData([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTemplateData();
-  }, [resourceUrl]);
+    initializeData();
+  }, []);
 
-  // 处理文件下载
+  // 处理文件下载 - 通过API实现
   const handleDownload = async (file) => {
     try {
       message.loading(`正在准备下载: ${file.fileName}`);
@@ -86,7 +51,7 @@ export default function DManageComponent({ resourceUrl }) {
       // 向后端发送请求获取文件，传入必要参数
       const response = await axios.get("/api/daily_task/download", {
         params: {
-          resourceUrl: resourceUrl,
+          resourceUrl: file.resourceUrl,
         },
         responseType: "blob",
       });

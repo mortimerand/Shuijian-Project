@@ -529,11 +529,6 @@ function ConstructionLogC() {
           </li>
         </ol>
         <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
-          <ExportButton
-            logData={submittedLog}
-            onExportStart={handleExportStart}
-            onExportEnd={handleExportEnd}
-          />
           <button onClick={resetForm} className="btn btn-primary">
             完成
           </button>

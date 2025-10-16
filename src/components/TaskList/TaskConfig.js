@@ -26,7 +26,7 @@ const TASK_CONFIG = {
       templateImages: [
         {
           //hello图床 url: "https://www.helloimg.com/i/2025/10/13/68ecbcd8ad822.png",
-          url:"/templates/钢筋笼钢筋进场日常/质量证明书.png",
+          url:"/templates/5.1钢筋笼钢筋进场（日常）/质量证明书.png",
           desc: "《出场质量证明书》",
           type: "image",
         },

@@ -25,13 +25,12 @@ const TASK_CONFIG = {
       description: "验收进场钢筋的质量、规格和数量，确保符合设计和规范要求",
       templateImages: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbcd8ad822.png",
-          //url:"/templates/5.1钢筋笼钢筋进场（日常）/质量证明书.png",
+          url: "/templates/5.1钢筋笼钢筋进场（日常）/质量证明书.png",
           desc: "《出场质量证明书》",
           type: "image",
         },
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbc920aeb.png",
+          url: "/templates/5.1钢筋笼钢筋进场（日常）/实验报告单.png",
           desc: "《试验报告单》",
           type: "image",
         },
@@ -43,7 +42,7 @@ const TASK_CONFIG = {
       ],
       additionalTemplates: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbcd5b8f7c.png",
+          url: "/templates/5.2钢筋笼钢筋进场（验收）/现场验收照片.png",
           desc: "钢筋笼进场现场验收照片",
           type: "image",
         },
@@ -60,7 +59,12 @@ const TASK_CONFIG = {
       description: "检查钢筋存储环境是否符合要求，防止钢筋锈蚀和损坏",
       additionalTemplates: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbcb17464.jpg",
+          url: "/templates/4.2钢筋笼钢筋存储/存储场地照片.jpg",
+          desc: "钢筋笼钢筋存储存储场地照片",
+          type: "image",
+        },
+        {
+          url: "/templates/4.2钢筋笼钢筋存储/原料钢筋存储状态.png",
           desc: "钢筋笼钢筋存储原材料存储照片",
           type: "image",
         },
@@ -73,7 +77,7 @@ const TASK_CONFIG = {
         "向施工人员详细说明钢筋笼焊接的技术要求、质量标准和安全注意事项",
       additionalTemplates: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbdc95708.png",
+          url: "/templates/6.2钢筋笼焊接技术交底 （验收）/现场技术交底照片.png",
           desc: "钢筋笼焊接技术交底照片",
           type: "image",
         },
@@ -90,7 +94,7 @@ const TASK_CONFIG = {
       description: "向施工人员详细说明成桩的技术要求、质量标准和安全注意事项",
       additionalTemplates: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbd8945d6.png",
+          url: "/templates/2.2成桩技术交底/交底图片.png",
           desc: "成桩技术交底照片",
           type: "image",
         },
@@ -107,7 +111,7 @@ const TASK_CONFIG = {
       description: "按照设计图纸和技术要求制作钢筋笼，确保尺寸准确、焊接牢固",
       templateImages: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbcb64867.png",
+          url: "/templates/7.1钢筋笼生产（日常）/作业照片.png",
           desc: "钢筋笼生产作业照片",
           type: "image",
         },
@@ -119,7 +123,7 @@ const TASK_CONFIG = {
       ],
       additionalTemplates: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbd5dd191.jpg",
+          url: "/templates/7.1钢筋笼生产（日常）/检查照片.png",
           desc: "钢筋笼生产监理验收照片",
           type: "image",
         },
@@ -131,7 +135,7 @@ const TASK_CONFIG = {
       description: "按照设计图纸和技术要求制作钢筋笼，确保尺寸准确、焊接牢固",
       templateImages: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbcb64867.png",
+          url: "/templates/7.1钢筋笼生产（日常）/作业照片.png",
           desc: "钢筋笼生产作业照片",
           type: "image",
         },
@@ -143,7 +147,7 @@ const TASK_CONFIG = {
       ],
       additionalTemplates: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbd5dd191.jpg",
+          url: "/templates/7.1钢筋笼生产（日常）/检查照片.png",
           desc: "钢筋笼生产监理验收照片",
           type: "image",
         },
@@ -156,7 +160,7 @@ const TASK_CONFIG = {
       description: "按照设计要求和技术规范进行桩基础的施工，确保成桩质量",
       templateImages: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbcd6b71d1.png",
+          url: "/templates/3.1成桩（日常）/现场作业照片.png",
           desc: "成桩作业照片",
           type: "image",
         },
@@ -168,12 +172,13 @@ const TASK_CONFIG = {
       ],
       additionalTemplates: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbd3e8965.jpg",
+          url: "/templates/3.2成桩（验收）/现场验收照片.jpg",
           desc: "成桩监理验收照片",
           type: "image",
         },
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbcdcd7dc6.png",
+          //url: "https://www.helloimg.com/i/2025/10/13/68ecbcdcd7dc6.png",
+          url: "/templates/3.2成桩（验收）/桩长统计表.png",
           desc: "成桩桩长统计表",
           type: "image",
         },
@@ -185,7 +190,7 @@ const TASK_CONFIG = {
       description: "按照设计要求和技术规范进行桩基础的施工，确保成桩质量",
       templateImages: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbcd6b71d1.png",
+          url: "/templates/3.1成桩（日常）/现场作业照片.png",
           desc: "成桩作业照片",
           type: "image",
         },
@@ -197,12 +202,12 @@ const TASK_CONFIG = {
       ],
       additionalTemplates: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbd3e8965.jpg",
+          url: "/templates/3.2成桩（验收）/现场验收照片.jpg",
           desc: "成桩监理验收照片",
           type: "image",
         },
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbcdcd7dc6.png",
+          url: "/templates/3.2成桩（验收）/桩长统计表.png",
           desc: "成桩桩长统计表",
           type: "image",
         },
@@ -214,12 +219,12 @@ const TASK_CONFIG = {
       description: "将制作好的钢筋笼吊装入孔，并进行混凝土灌注，确保施工质量",
       templateImages: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbcf7ba69.png",
+          url: "/templates/8.1钢筋笼吊装、混凝土灌注（日常）/钢筋笼吊装照片.png",
           desc: "钢筋笼吊装作业照片",
           type: "image",
         },
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbe4938e4.png",
+          url: "/templates/8.1钢筋笼吊装、混凝土灌注（日常）/混凝土灌注照片.png",
           desc: "钢筋笼吊装混凝土灌注照片",
           type: "image",
         },
@@ -236,7 +241,7 @@ const TASK_CONFIG = {
       ],
       additionalTemplates: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbdd8a35b.png",
+          url: "/templates/8.2钢筋笼吊装、混凝土灌注（验收）/浇筑完成后照片.png",
           desc: "钢筋笼吊装灌注完成照片",
           type: "image",
         },
@@ -258,12 +263,12 @@ const TASK_CONFIG = {
       description: "将制作好的钢筋笼吊装入孔，并进行混凝土灌注，确保施工质量",
       templateImages: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbcf7ba69.png",
+          url: "/templates/8.1钢筋笼吊装、混凝土灌注（日常）/钢筋笼吊装照片.png",
           desc: "钢筋笼吊装作业照片",
           type: "image",
         },
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbe4938e4.png",
+          url: "/templates/8.1钢筋笼吊装、混凝土灌注（日常）/混凝土灌注照片.png",
           desc: "钢筋笼吊装混凝土灌注照片",
           type: "image",
         },
@@ -280,7 +285,7 @@ const TASK_CONFIG = {
       ],
       additionalTemplates: [
         {
-          url: "https://www.helloimg.com/i/2025/10/13/68ecbbdd8a35b.png",
+          url: "/templates/8.2钢筋笼吊装、混凝土灌注（验收）/浇筑完成后照片.png",
           desc: "钢筋笼吊装灌注完成照片",
           type: "image",
         },

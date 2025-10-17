@@ -738,6 +738,33 @@
   color: #1890ff;
 }
 
+/* 日期选择器容器样式 */
+.time-picker {
+  background-color: white;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--shadow-light);
+  border: 1px solid var(--border-light);
+}
+
+.date-display {
+  display: flex;
+  align-items: center;
+}
+
+.date-label {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-right: var(--spacing-xs);
+}
+
+.date-value {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 500;
+}
+
 /* 动画定义 */
 @keyframes fadeIn {
   from {

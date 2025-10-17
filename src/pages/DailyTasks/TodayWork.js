@@ -11,6 +11,8 @@ function TodayWork() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [noTaskMessage, setNoTaskMessage] = useState("");
+  // 添加date状态来存储日期字段
+  const [date, setDate] = useState("");
 
   useEffect(() => {
     const fetchTaskData = async () => {
@@ -27,10 +29,16 @@ function TodayWork() {
         const data = await response.json();
         // 检查返回的状态码
         if (data.code === "200" && data.data) {
-          // 有任务时的数据处理
+          // 从新的数据结构中提取date字段
+          if (data.data.date) {
+            setDate(data.data.date);
+          }
+          
+          // 从taskInfo对象中提取任务数据
+          const taskInfo = data.data.taskInfo || {};
           // 确保 normal 和 unNormal 始终是数组格式
-          const normals = data.data.normal || [];
-          const unNormals = data.data.unNormal || [];
+          const normals = taskInfo.normal || [];
+          const unNormals = taskInfo.unNormal || [];
 
           // 处理单个对象的情况
           setNormalTasks(Array.isArray(normals) ? normals : [normals]);
@@ -64,6 +72,16 @@ function TodayWork() {
   return (
     <div className="page-todaywork">
       <div className="page-content">
+        {/* 添加日期显示容器 */}
+        {date && (
+          <div className="time-picker">
+            <div className="date-display">
+              <span className="date-label">日期：</span>
+              <span className="date-value">{date}</span>
+            </div>
+          </div>
+        )}
+        
         <WorkContent
           normalTasks={normalTasks}
           unNormalTasks={unNormalTasks}

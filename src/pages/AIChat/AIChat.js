@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import AIChatComponent from '../../components/AIChat/AIChatComponent.js';
+import AIChatIndex from '../../components/AIChat/AIChatIndex.js';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import '../../components/AIChat/AIChatComponent.css';
+import '../../components/AIChat/AIChatIndex.css';
 
 function AIChat() {
   const [markdownContent, setMarkdownContent] = useState('');
@@ -18,7 +18,7 @@ function AIChat() {
       </div>
       <div className="page-content">
         <div className="card">
-          <AIChatComponent />
+          <AIChatIndex />
         </div>
         
       </div>

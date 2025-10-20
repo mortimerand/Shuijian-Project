@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import WorkContent from "../../components/ContentRender/TodayWorkContent";
+import TodayWorkContent from "../../components/ContentRender/TodayWorkContent";
 import "./DailyTasks.css";
 
 function TodayWork() {
@@ -82,7 +82,7 @@ function TodayWork() {
           </div>
         )}
         
-        <WorkContent
+        <TodayWorkContent
           normalTasks={normalTasks}
           unNormalTasks={unNormalTasks}
           noTaskMessage={noTaskMessage}

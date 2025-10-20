@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Spin, Alert } from "antd";
-import WorkContent from "../../components/ContentRender/WorkContent";
+import TodayWorkContent from "../../components/ContentRender/TodayWorkContent";
 import "./DailyTasks.css";
 
 function ProgressSummary() {
@@ -222,7 +222,7 @@ function ProgressSummary() {
       {/* 明日任务部分 */}
       <div className="tomorrow-tasks-section" style={{ marginTop: '40px' }}>
         <h2>明日任务安排</h2>
-        <WorkContent
+        <TodayWorkContent
           normalTasks={tomorrowTasks.normal || []}
           unNormalTasks={tomorrowTasks.unNormal || []}
           noTaskMessage={tomorrowNoTaskMessage}

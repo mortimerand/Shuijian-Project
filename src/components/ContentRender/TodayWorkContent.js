@@ -1,7 +1,7 @@
 import React from "react";
 import "./TodayWorkContent.css";
 
-function WorkContent({ normalTasks, unNormalTasks, noTaskMessage, loading, error }) {
+function TodayWorkContent({ normalTasks, unNormalTasks, noTaskMessage, loading, error }) {
   if (loading) {
     return (
       <div className="card card-loading">
@@ -131,4 +131,4 @@ function WorkContent({ normalTasks, unNormalTasks, noTaskMessage, loading, error
   );
 }
 
-export default WorkContent;
+export default TodayWorkContent;

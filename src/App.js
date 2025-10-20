@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage.js';
 import AIChat from './pages/AIChat/AIChat.js';
 import DocumentManage from './pages/DocumentManage/DocumentManage.js';

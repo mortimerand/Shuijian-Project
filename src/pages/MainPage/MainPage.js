@@ -52,7 +52,7 @@ function MainPage() {
     <div className="page-container">
       <div className="page-header">
         <div>
-          <h1>测试应用</h1>
+          <h1>人工挖孔桩智能辅助系统</h1>
           <p>欢迎，{username}！</p>
         </div>
         <button 

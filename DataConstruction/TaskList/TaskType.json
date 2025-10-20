@@ -1,0 +1,50 @@
+[
+  {
+    "taskCode": "ZHUANGDIAN_FANGYANG",
+    "taskName": "桩点放样"
+  },
+  {
+    "taskCode": "GANGJINLONG_GANGJIN_CUNCHU",
+    "taskName": "钢筋笼钢筋存储环境检查"
+  },
+  {
+    "taskCode": "GANGJINGLONG_HANJIE_JISHU",
+    "taskName": "钢筋笼焊接技术交底"
+  },
+  {
+    "taskCode": "CHENGZHUANG_JISHU",
+    "taskName": "成桩技术交底"
+  },
+  {
+    "taskCode": "GANGJINLONG_GANGJIN_JINCHANG",
+    "taskName": "钢筋笼钢筋进场"
+  },
+  {
+    "taskCode": "GANGJINLONG_DIAOZHUANG_135",
+    "taskName": "钢筋笼吊装，混凝土灌注_135"
+  },
+  {
+    "taskCode": "GANGJINLONG_SHENGCHAN_135",
+    "taskName": "钢筋笼生产_135"
+  },
+  {
+    "taskCode": "CHENGZHUANG_135",
+    "taskName": "成桩_135"
+  },
+  {
+    "taskCode": "GANGJINLONG_DIAOZHUANG_246",
+    "taskName": "钢筋笼吊装，混凝土灌注_246"
+  },
+  {
+    "taskCode": "GANGJINLONG_SHENGCHAN_246",
+    "taskName": "钢筋笼生产_246"
+  },
+  {
+    "taskCode": "CHENGZHUANG_246",
+    "taskName": "成桩_246"
+  },
+  {
+    "taskCode": "SHIGONGRIZHI",
+    "taskName": "施工日志"
+  }
+]

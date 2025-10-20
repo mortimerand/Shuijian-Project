@@ -84,6 +84,10 @@ export async function uploadFileToServer(taskData) {
       taskData.images.forEach((file, index) => {
         // 使用相同的键名，FormData会自动处理多个文件
         formData.append(`images`, file);
+        // 添加额外的文件信息，帮助后端识别 - 与docs处理方式保持一致
+        formData.append(`imagesName_${index}`, file.name);
+        formData.append(`imagesType_${index}`, file.type);
+        formData.append(`imagesSize_${index}`, file.size);
       });
     }
     if (taskData.imagesSubtasks && taskData.imagesSubtasks.length > 0) {

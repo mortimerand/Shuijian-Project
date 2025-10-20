@@ -410,7 +410,10 @@ const TaskListIndex = () => {
     // 辅助函数：获取最匹配的taskNeedDataCode
     const getBestMatchingTaskCode = (desc, taskTypeCode) => {
       const mapping = TASK_CONFIG.taskDataMapping[taskTypeCode];
-      if (!mapping) return "";
+      if (!mapping) {
+        console.warn(`No mapping found for taskTypeCode: ${taskTypeCode}`);
+        return "";
+      }
 
       // 尝试直接匹配
       if (mapping[desc]) return mapping[desc];
@@ -429,9 +432,15 @@ const TaskListIndex = () => {
       // 如果是带后缀的任务类型，尝试使用基础任务类型的映射
       if (taskTypeCode.includes("_")) {
         const baseTaskTypeCode = taskTypeCode.split("_")[0];
-        return getBestMatchingTaskCode(desc, baseTaskTypeCode);
+        const baseCode = getBestMatchingTaskCode(desc, baseTaskTypeCode);
+        if (baseCode) {
+          return baseCode;
+        }
       }
 
+      console.warn(
+        `No matching code found for description: ${desc}, taskTypeCode: ${taskTypeCode}`
+      );
       return "";
     };
 

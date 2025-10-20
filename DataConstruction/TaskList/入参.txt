@@ -1,0 +1,13 @@
+入参
+字段	类型	描述
+taskType	String	任务类型，参考TaskType枚举
+images	photo	图片，支持多个图片上传
+imagesSubtasks	List<String>	每个图片对应的任务名称，参考SubTaskType枚举
+docs	file	文件，支持多个图片上传
+docsSubtasks	List<String>	每个文件对应的任务名称，参考SubTaskType枚举
+
+返回 
+字段	类型	描述
+code	String	200表示成功，其他表示失败
+message	String	请求结果
+data	object	返回的数据

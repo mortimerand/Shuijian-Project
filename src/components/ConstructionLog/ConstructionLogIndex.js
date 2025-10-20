@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-function ConstructionLogC() {
+function ConstructionLogIndex() {
   // 根据后端参数模板定义日志字段
   const [newLog, setNewLog] = useState({
     projectName: "", // 工程项目
@@ -577,4 +577,4 @@ function ConstructionLogC() {
   );
 }
 
-export default ConstructionLogC;
+export default ConstructionLogIndex;

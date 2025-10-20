@@ -43,11 +43,6 @@ const TaskListIndex = () => {
   const [currentTemplateFile, setCurrentTemplateFile] = useState(null);
   //const [selectedTaskSuffix, setSelectedTaskSuffix] = useState(""); //后缀选择
 
-  // // 实现getTaskSuffix函数
-  // const getTaskSuffix = useCallback(() => {
-  //   return selectedTaskSuffix;
-  // }, [selectedTaskSuffix]);
-
   // 获取当前任务
   const getCurrentTask = useCallback(() => {
     if (!currentTaskId) return null;
@@ -356,232 +351,170 @@ const TaskListIndex = () => {
   );
 
   // 实现单任务提交功能
-  const submitTaskFiles = useCallback(
-    async (taskId) => {
-      const task = tasks.find((t) => t.id === taskId);
-      if (!task) return;
+  const submitTaskFiles = useCallback(async (taskId) => {
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task) return;
 
-      // 收集该任务的所有暂存文件
-      const taskData = {
-        taskId: task.id,
-        taskType: "",
-        images: [],
-        imagesSubtasks: [],
-        docs: [],
-        docsSubtasks: [],
-        fileMap: new Map(),
-      };
+    // 收集该任务的所有暂存文件
+    const taskData = {
+      taskId: task.id,
+      taskType: "",
+      images: [],
+      imagesSubtasks: [],
+      docs: [],
+      docsSubtasks: [],
+      fileMap: new Map(),
+    };
 
-      // 获取任务类型编码
-      let taskTypeCode = "";
-      for (const [key, value] of Object.entries(TASK_CONFIG.taskTypeMapping)) {
-        const taskType = TASK_CONFIG.fixedTasks.find((t) => t.id === key);
-        if (
-          taskType &&
-          taskType.title === task.title.replace(/-(135|246)$/, "")
-        ) {
-          // 检查任务标题是否包含特定标识，用于判断是否需要添加后缀
-          if (task.title.includes("-135")) {
-            taskTypeCode = `${value}_135`;
-          } else if (task.title.includes("-246")) {
-            taskTypeCode = `${value}_246`;
-          } else {
-            taskTypeCode = value;
-          }
-          break;
+    // 获取任务类型编码
+    let taskTypeCode = "";
+    for (const [key, value] of Object.entries(TASK_CONFIG.taskTypeMapping)) {
+      const taskType = TASK_CONFIG.fixedTasks.find((t) => t.id === key);
+      if (
+        taskType &&
+        taskType.title === task.title.replace(/-(135|246)$/, "")
+      ) {
+        // 检查任务标题是否包含特定标识，用于判断是否需要添加后缀
+        if (task.title.includes("-135")) {
+          taskTypeCode = `${value}_135`;
+        } else if (task.title.includes("-246")) {
+          taskTypeCode = `${value}_246`;
+        } else {
+          taskTypeCode = value;
+        }
+        break;
+      }
+    }
+
+    if (!taskTypeCode) {
+      message.error("无法获取任务类型编码");
+      return;
+    }
+
+    taskData.taskType = taskTypeCode;
+
+    // 检查是否有暂存文件
+    const hasStagedFiles =
+      task.templateImages?.some((img) =>
+        img.uploadedFiles?.some((f) => f.status === "staged")
+      ) ||
+      task.additionalTemplateImages?.some((img) =>
+        img.uploadedFiles?.some((f) => f.status === "staged")
+      );
+
+    if (!hasStagedFiles) {
+      message.info("该任务没有暂存的文件需要提交");
+      return;
+    }
+
+    // 辅助函数：获取最匹配的taskNeedDataCode
+    const getBestMatchingTaskCode = (desc, taskTypeCode) => {
+      const mapping = TASK_CONFIG.taskDataMapping[taskTypeCode];
+      if (!mapping) return "";
+
+      // 尝试直接匹配
+      if (mapping[desc]) return mapping[desc];
+
+      // 去除描述中的特殊字符和空格尝试匹配
+      const cleanDesc = desc.replace(/[《》""'']/g, "").trim();
+      if (mapping[cleanDesc]) return mapping[cleanDesc];
+
+      // 搜索包含关键词的匹配
+      for (const [key, value] of Object.entries(mapping)) {
+        if (key.includes(cleanDesc) || cleanDesc.includes(key)) {
+          return value;
         }
       }
 
-      if (!taskTypeCode) {
-        message.error("无法获取任务类型编码");
-        return;
+      // 如果是带后缀的任务类型，尝试使用基础任务类型的映射
+      if (taskTypeCode.includes("_")) {
+        const baseTaskTypeCode = taskTypeCode.split("_")[0];
+        return getBestMatchingTaskCode(desc, baseTaskTypeCode);
       }
 
-      taskData.taskType = taskTypeCode;
+      return "";
+    };
 
-      // 检查是否有暂存文件
-      const hasStagedFiles =
-        task.templateImages?.some((img) =>
-          img.uploadedFiles?.some((f) => f.status === "staged")
-        ) ||
-        task.additionalTemplateImages?.some((img) =>
-          img.uploadedFiles?.some((f) => f.status === "staged")
-        );
-
-      if (!hasStagedFiles) {
-        message.info("该任务没有暂存的文件需要提交");
-        return;
-      }
-
-      // 处理主模板文件
-      if (task.templateImages) {
-        task.templateImages.forEach((img, imageIndex) => {
-          if (img.uploadedFiles) {
-            img.uploadedFiles.forEach((file) => {
-              if (file.status === "staged") {
-                const taskNeedDataCode =
-                  TASK_CONFIG.taskDataMapping[taskTypeCode]?.[img.desc] || "";
-
-                if (taskNeedDataCode) {
-                  // 根据文件类型区分images和docs
-                  if (file.type.startsWith("image/")) {
-                    taskData.images.push(file.fileData);
-                    taskData.imagesSubtasks.push(taskNeedDataCode);
-                  } else {
-                    taskData.docs.push(file.fileData);
-                    taskData.docsSubtasks.push(taskNeedDataCode);
-                  }
-
-                  // 存储文件信息用于状态更新
-                  taskData.fileMap.set(file.id, {
-                    file,
-                    imageIndex,
-                    isAdditional: false,
-                    taskTitle: task.title,
-                    imageDesc: img.desc,
-                  });
-                }
-              }
-            });
-          }
-        });
-      }
-
-      // 处理额外模板文件
-      if (task.additionalTemplateImages) {
-        task.additionalTemplateImages.forEach((img, imageIndex) => {
-          if (img.uploadedFiles) {
-            img.uploadedFiles.forEach((file) => {
-              if (file.status === "staged") {
-                const taskNeedDataCode =
-                  TASK_CONFIG.taskDataMapping[taskTypeCode]?.[img.desc] || "";
-
-                if (taskNeedDataCode) {
-                  // 根据文件类型区分images和docs
-                  if (file.type.startsWith("image/")) {
-                    taskData.images.push(file.fileData);
-                    taskData.imagesSubtasks.push(taskNeedDataCode);
-                  } else {
-                    taskData.docs.push(file.fileData);
-                    taskData.docsSubtasks.push(taskNeedDataCode);
-                  }
-
-                  // 存储文件信息用于状态更新
-                  taskData.fileMap.set(file.id, {
-                    file,
-                    imageIndex,
-                    isAdditional: true,
-                    taskTitle: task.title,
-                    imageDesc: img.desc,
-                  });
-                }
-              }
-            });
-          }
-        });
-      }
-
-      // 更新所有文件状态为上传中
-      setTasks((prevTasks) => {
-        const newTasks = [...prevTasks];
-        const taskIndex = newTasks.findIndex((t) => t.id === taskId);
-
-        if (taskIndex !== -1) {
-          const updatedTask = { ...newTasks[taskIndex] };
-
-          // 更新主模板文件状态
-          if (updatedTask.templateImages) {
-            updatedTask.templateImages.forEach((img) => {
-              if (img.uploadedFiles) {
-                img.uploadedFiles.forEach((file) => {
-                  if (taskData.fileMap.has(file.id)) {
-                    file.status = "uploading";
-                  }
-                });
-              }
-            });
-          }
-
-          // 更新额外模板文件状态
-          if (updatedTask.additionalTemplateImages) {
-            updatedTask.additionalTemplateImages.forEach((img) => {
-              if (img.uploadedFiles) {
-                img.uploadedFiles.forEach((file) => {
-                  if (taskData.fileMap.has(file.id)) {
-                    file.status = "uploading";
-                  }
-                });
-              }
-            });
-          }
-
-          newTasks[taskIndex] = updatedTask;
-        }
-
-        return newTasks;
-      });
-
-      // 移除不需要提交的字段
-      const { taskId: id, fileMap, ...submitData } = taskData;
-      const result = await uploadFileToServer(submitData);
-
-      // 更新文件状态
-      setTasks((prevTasks) => {
-        const newTasks = [...prevTasks];
-        const taskIndex = newTasks.findIndex((t) => t.id === taskId);
-
-        if (taskIndex !== -1) {
-          const task = newTasks[taskIndex];
-
-          // 更新每个文件的状态
-          fileMap.forEach(({ file, imageIndex, isAdditional }) => {
-            let targetImages;
-
-            if (isAdditional && task.additionalTemplateImages) {
-              targetImages = task.additionalTemplateImages;
-            } else {
-              targetImages = task.templateImages;
-            }
-
-            if (
-              targetImages &&
-              targetImages[imageIndex] &&
-              targetImages[imageIndex].uploadedFiles
-            ) {
-              const fileInTask = targetImages[imageIndex].uploadedFiles.find(
-                (f) => f.id === file.id
+    // 处理主模板文件
+    if (task.templateImages) {
+      task.templateImages.forEach((img, imageIndex) => {
+        if (img.uploadedFiles) {
+          img.uploadedFiles.forEach((file) => {
+            if (file.status === "staged") {
+              const taskNeedDataCode = getBestMatchingTaskCode(
+                img.desc,
+                taskTypeCode
               );
-              if (fileInTask) {
-                fileInTask.status = result.success ? "done" : "error";
+
+              // 即使没有找到完全匹配的code，也应该上传文件
+              // 根据文件类型区分images和docs
+              if (file.type.startsWith("image/")) {
+                taskData.images.push(file.fileData);
+                taskData.imagesSubtasks.push(
+                  taskNeedDataCode || `${taskTypeCode}_IMAGE_${imageIndex}`
+                );
+              } else {
+                taskData.docs.push(file.fileData);
+                taskData.docsSubtasks.push(
+                  taskNeedDataCode || `${taskTypeCode}_DOC_${imageIndex}`
+                );
               }
+
+              // 存储文件信息用于状态更新
+              taskData.fileMap.set(file.id, {
+                file,
+                imageIndex,
+                isAdditional: false,
+                taskTitle: task.title,
+                imageDesc: img.desc,
+              });
             }
           });
-
-          // 只有在文件上传成功时才检查并更新任务状态
-          if (result.success) {
-            const allRequiredItemsUploaded =
-              checkAllRequiredItemsUploaded(task);
-            newTasks[taskIndex].status = allRequiredItemsUploaded
-              ? "completed"
-              : "pending";
-          }
         }
-
-        return newTasks;
       });
+    }
 
-      // 重置暂存标记
-      setHasStagedFiles(false);
+    // 处理额外模板文件
+    if (task.additionalTemplateImages) {
+      task.additionalTemplateImages.forEach((img, imageIndex) => {
+        if (img.uploadedFiles) {
+          img.uploadedFiles.forEach((file) => {
+            if (file.status === "staged") {
+              const taskNeedDataCode = getBestMatchingTaskCode(
+                img.desc,
+                taskTypeCode
+              );
 
-      // 显示上传结果
-      if (result.success) {
-        message.success(`${task.title} 的文件上传成功`);
-      } else {
-        message.error(`${task.title} 的文件上传失败: ${result.error}`);
-      }
-    },
-    [tasks]
-  );
+              // 即使没有找到完全匹配的code，也应该上传文件
+              // 根据文件类型区分images和docs
+              if (file.type.startsWith("image/")) {
+                taskData.images.push(file.fileData);
+                taskData.imagesSubtasks.push(
+                  taskNeedDataCode ||
+                    `${taskTypeCode}_ADDITIONAL_IMAGE_${imageIndex}`
+                );
+              } else {
+                taskData.docs.push(file.fileData);
+                taskData.docsSubtasks.push(
+                  taskNeedDataCode ||
+                    `${taskTypeCode}_ADDITIONAL_DOC_${imageIndex}`
+                );
+              }
+
+              // 存储文件信息用于状态更新
+              taskData.fileMap.set(file.id, {
+                file,
+                imageIndex,
+                isAdditional: true,
+                taskTitle: task.title,
+                imageDesc: img.desc,
+              });
+            }
+          });
+        }
+      });
+    }
+  });
 
   // 实现通用的额外模板处理函数
   const toggleAdditionalTemplates = useCallback((taskId) => {

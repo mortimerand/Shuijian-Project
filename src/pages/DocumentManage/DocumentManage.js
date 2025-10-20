@@ -1,4 +1,4 @@
-import DManageComponent from "../../components/Document/DManageComponent.js";
+import DocumentManageIndex from "../../components/DocumentManage/DocumentManageIndex.js";
 import {
   Link,
   Routes,
@@ -21,7 +21,7 @@ function DocumentManage() {
       </div>
       {/* 页面内容 */}
       <main className="page-content">
-        <DManageComponent />
+        <DocumentManageIndex />
       </main>
     </div>
   );

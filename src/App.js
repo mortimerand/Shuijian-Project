@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage.js';
 import AIChat from './pages/AIChat/AIChat.js';
-import DocumentManage from './pages/Document/DocumentManage.js';
+import DocumentManage from './pages/DocumentManage/DocumentManage.js';
 import ProfilePage from './pages/ProfilePage/ProfilePage.js';
 import DailyTasks from './pages/DailyTasks/DailyTasks.js';
 import Login from './pages/Login/Login.js';

@@ -1,10 +1,10 @@
 import React from "react";
-import ConstructionLogC from "../../components/ConstructionLogC/ConstructionLogC";
+import ConstructionLogIndex from "../../components/ConstructionLog/ConstructionLogIndex";
 
 function ConstructionLog() {
   return (
     <div className="card">
-      <ConstructionLogC />
+      <ConstructionLogIndex />
     </div>
   );
 }

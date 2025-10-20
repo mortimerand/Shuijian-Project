@@ -1,5 +1,5 @@
 import React from "react";
-import "./WorkContent.css";
+import "./TodayWorkContent.css";
 
 function WorkContent({ normalTasks, unNormalTasks, noTaskMessage, loading, error }) {
   if (loading) {

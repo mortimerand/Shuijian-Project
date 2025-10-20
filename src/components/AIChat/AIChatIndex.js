@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./AIChatComponent.css";
+import "./AIChatIndex.css";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-function AIChatComponent() {
+function AIChatIndex() {
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -192,4 +192,4 @@ function AIChatComponent() {
   );
 }
 
-export default AIChatComponent;
+export default AIChatIndex;

@@ -30,7 +30,7 @@ const TASK_CONFIG = {
           type: "image",
         },
         {
-          url: "/templates/5.1钢筋笼钢筋进场（日常）/实验报告单.png",
+          url: "/templates/5.1钢筋笼钢筋进场（日常）/试验报告单.png",
           desc: "《试验报告单》",
           type: "image",
         },

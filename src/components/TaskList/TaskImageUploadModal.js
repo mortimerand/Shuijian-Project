@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "antd";
-import { generateUUID } from "./TaskUtils";
+import { generateUUID, formatFileSize } from "./TaskUtils";
 import { TASK_CONFIG } from "./TaskConfig";
 
 const TaskImageUploadModal = ({
@@ -14,6 +14,16 @@ const TaskImageUploadModal = ({
   const handleFileUpload = (e, imageIndex) => {
     const files = Array.from(e.target.files);
     onFileUpload(task.id, imageIndex, files);
+  };
+
+  // 处理文件删除
+  const handleFileDelete = (imageIndex, fileId) => {
+    onFileUpload(task.id, imageIndex, [], false, fileId);
+  };
+
+  // 处理提交
+  const handleSubmit = () => {
+    onSubmit(task.id);
   };
 
   // 增强版预览模板功能
@@ -48,12 +58,36 @@ const TaskImageUploadModal = ({
     }
   };
 
+  // 检查是否有暂存文件
+  const hasStagedFiles =
+    task?.templateImages?.some((img) =>
+      img.uploadedFiles?.some((file) => file.status === "staged")
+    ) || false;
+
   return (
     <Modal
       title="日常任务资料"
       open={visible}
       onCancel={onClose}
-      footer={null}
+      footer={[
+        <button
+          key="submit"
+          type="button"
+          className="btn btn-primary"
+          onClick={handleSubmit}
+          disabled={!hasStagedFiles}
+        >
+          提交所有文件
+        </button>,
+        <button
+          key="cancel"
+          type="button"
+          className="btn btn-default"
+          onClick={onClose}
+        >
+          取消
+        </button>,
+      ]}
       width={800}
       centered
       maxHeight="80vh"
@@ -99,43 +133,40 @@ const TaskImageUploadModal = ({
                     <span>+ 暂存相关文件</span>
                   </label>
 
+                  {/* 显示已上传的文件 */}
                   {image.uploadedFiles && image.uploadedFiles.length > 0 && (
-                    <div className="image-uploaded-files">
+                    <div className="uploaded-files">
                       {image.uploadedFiles.map((file) => (
                         <div
                           key={file.id}
-                          className={`uploaded-file-item file-${
-                            file.status || "uploaded"
-                          }`}
+                          className={`uploaded-file-item file-${file.status}`}
                         >
                           <span className="file-name">{file.name}</span>
                           <span className="file-size">
-                            {(file.size / 1024).toFixed(1)}KB
+                            {formatFileSize(file.size)}
                           </span>
                           {file.status === "staged" && (
-                            <span className="file-status staged">已暂存</span>
+                            <>
+                              <span className="file-status staged">已暂存</span>
+                              <button
+                                className="file-delete-btn"
+                                onClick={() =>
+                                  handleFileDelete(imageIndex, file.id)
+                                }
+                                title="删除文件"
+                              >
+                                ×
+                              </button>
+                            </>
                           )}
                           {file.status === "uploading" && (
                             <span className="file-status uploading">
                               上传中...
                             </span>
                           )}
-                          {file.status === "success" && (
-                            <span className="file-status success">
-                              上传成功
-                            </span>
+                          {file.status === "uploaded" && (
+                            <span className="file-status uploaded">已上传</span>
                           )}
-                          {file.status === "error" && (
-                            <span className="file-status error">上传失败</span>
-                          )}
-                          <button
-                            className="delete-file-btn"
-                            onClick={() =>
-                              onFileUpload(task.id, imageIndex, [], file.id)
-                            }
-                          >
-                            删除
-                          </button>
                         </div>
                       ))}
                     </div>
@@ -143,16 +174,6 @@ const TaskImageUploadModal = ({
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* 添加任务级提交按钮 */}
-          <div className="task-submit-container">
-            <button
-              className="btn btn-primary"
-              onClick={() => onSubmit(task.id)}
-            >
-              提交该任务的所有文件
-            </button>
           </div>
         </div>
       )}

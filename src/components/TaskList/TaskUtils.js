@@ -16,7 +16,6 @@ export function generateUUID() {
 }
 
 // 检查任务是否所有必要的项都有文件上传
-// 检查任务是否所有必要的项都有文件上传
 export function checkAllRequiredItemsUploaded(task) {
   // 检查主模板项 - 只有在有主模板时才要求上传
   const mainTemplatesAllUploaded =
@@ -26,7 +25,7 @@ export function checkAllRequiredItemsUploaded(task) {
       (img) =>
         img.uploadedFiles &&
         img.uploadedFiles.length > 0 &&
-        img.uploadedFiles.some((f) => f.status === "done")
+        img.uploadedFiles.some((f) => f.status === "uploaded")
     );
 
   // 检查额外模板项（如果有）- 确保每个额外模板都有至少一个上传成功的文件
@@ -37,7 +36,7 @@ export function checkAllRequiredItemsUploaded(task) {
       (img) =>
         img.uploadedFiles &&
         img.uploadedFiles.length > 0 &&
-        img.uploadedFiles.some((f) => f.status === "done")
+        img.uploadedFiles.some((f) => f.status === "uploaded")
     );
 
   return mainTemplatesAllUploaded && additionalTemplatesAllUploaded;
@@ -73,30 +72,38 @@ export function getStatusClass(status) {
   return status === "completed" ? "task-completed" : "task-pending";
 }
 
-// 添加文件上传到后端的函数
+// 添加文件上传到后端的函数 - 统一参数格式
 export async function uploadFileToServer(taskData) {
   try {
     const formData = new FormData();
     // 添加任务类型
     formData.append("taskType", taskData.taskType);
+
+    // 添加任务ID
+    if (taskData.taskId) {
+      formData.append("taskId", taskData.taskId);
+    }
+
     // 添加图片和对应的subtasks
     if (taskData.images && taskData.images.length > 0) {
       taskData.images.forEach((file, index) => {
         // 使用相同的键名，FormData会自动处理多个文件
         formData.append(`images`, file);
-        // 添加额外的文件信息，帮助后端识别 - 与docs处理方式保持一致
+        // 添加额外的文件信息，帮助后端识别
         formData.append(`imagesName_${index}`, file.name);
         formData.append(`imagesType_${index}`, file.type);
         formData.append(`imagesSize_${index}`, file.size);
       });
     }
+
     if (taskData.imagesSubtasks && taskData.imagesSubtasks.length > 0) {
       formData.append(
         "imagesSubtasks",
         JSON.stringify(taskData.imagesSubtasks)
       );
     }
-    // 添加文档和对应的subtasks - 修复文件上传问题
+
+    // 添加文档和对应的subtasks - 统一处理方式
     if (taskData.docs && taskData.docs.length > 0) {
       taskData.docs.forEach((file, index) => {
         // 使用相同的键名，确保与图片上传处理方式一致
@@ -107,21 +114,36 @@ export async function uploadFileToServer(taskData) {
         formData.append(`docsSize_${index}`, file.size);
       });
     }
+
     if (taskData.docsSubtasks && taskData.docsSubtasks.length > 0) {
       formData.append("docsSubtasks", JSON.stringify(taskData.docsSubtasks));
     }
+
     // 发送请求到后端
     const response = await fetch("/api/daily_task/upload", {
       method: "POST",
       body: formData,
     });
+
     if (!response.ok) {
       throw new Error("上传失败");
     }
+
     const result = await response.json();
     return { success: true, result };
   } catch (error) {
     console.error("文件上传失败:", error);
     return { success: false, error: error.message };
   }
+}
+
+// 格式化文件大小显示
+export function formatFileSize(bytes) {
+  if (bytes === 0) return "0 Bytes";
+
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 }
